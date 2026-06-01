@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f2240">
+<title>Crani Cards Summer '26</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Palette: navy header (unchanged), sage replaces teal, terracotta replaces gold */
+  --navy:#0f2240;
+  --teal:#5f9089;--teal-light:#7eaca4;--teal-dark:#46776f;
+  --teal-soft:#e7efec;
+  --gold:#c97f5e;--gold-light:#db9a7e;--gold-dark:#a8694b;
+  --gold-soft:#f3e8df;
+  --gold-soft-text:#b07758;
+  --bg:#f0f4f8;--card:#fff;--border:#d1dbe8;
+  --text:#1e293b;--muted:#64748b;
+  --radius:12px;
+  --header-h:60px;
+  /* 11 chunk colors */
+  --c1:#ef6f6c;--c2:#e8a33d;--c3:#a8c66c;--c4:#6b8e23;--c5:#2a7f5f;
+  --c6:#4ea1d3;--c7:#4a4e9c;--c8:#7c5cb8;--c9:#c44b8a;--c10:#a64242;--c11:#8b6244;
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-tap-highlight-color:transparent;overflow-x:hidden;font-size:16px}
+
+/* ── HEADER ── */
+#site-header{position:sticky;top:0;z-index:300;height:var(--header-h);background:var(--navy);color:#fff;padding:0 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+.header-left .conf-title{font-family:'DM Serif Display',serif;font-size:1.15rem;line-height:1.1;letter-spacing:.01em}
+.header-left .conf-sub{color:#9bb8d0;font-size:.7rem;margin-top:2px;letter-spacing:.04em}
+#header-action{display:flex;gap:8px}
+.hdr-btn{background:transparent;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:18px;padding:6px 12px;font:600 .75rem 'DM Sans',sans-serif;cursor:pointer;min-height:36px}
+.hdr-btn.gold{background:var(--gold);border-color:var(--gold)}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:calc(100vh - var(--header-h));padding:20px 18px 40px}
+.screen.active{display:block}
+.screen-inner{max-width:560px;margin:0 auto}
+
+/* ── WELCOME ── */
+#welcome-screen .hero{text-align:center;padding:30px 0 22px}
+#welcome-screen h1{font-family:'DM Serif Display',serif;font-size:2rem;line-height:1.1;color:var(--navy);margin-bottom:8px}
+#welcome-screen .tagline{color:var(--muted);font-size:.95rem;line-height:1.5;max-width:340px;margin:0 auto}
+.form-block{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-top:18px}
+.field-label{display:block;font-weight:600;font-size:.85rem;color:var(--navy);margin-bottom:8px;letter-spacing:.02em}
+.field-hint{font-size:.78rem;color:var(--muted);margin-top:4px;line-height:1.4}
+.role-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+.role-chip{background:#fff;border:2px solid var(--border);border-radius:10px;padding:14px 8px;font:600 .9rem 'DM Sans',sans-serif;color:var(--text);cursor:pointer;text-align:center;transition:all .15s;min-height:54px}
+.role-chip:active{transform:scale(.97)}
+.role-chip.selected{background:var(--teal);border-color:var(--teal);color:#fff}
+.text-input{width:100%;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;font:400 1rem 'DM Sans',sans-serif;color:var(--text);min-height:48px}
+.text-input:focus{outline:none;border-color:var(--teal)}
+.cta{display:block;width:100%;background:var(--gold);color:#fff;border:none;border-radius:30px;padding:16px 20px;font:700 1.05rem 'DM Sans',sans-serif;cursor:pointer;margin-top:22px;min-height:56px;letter-spacing:.02em;box-shadow:0 4px 14px rgba(201,127,94,.35);transition:all .15s}
+.cta:active{transform:scale(.98);background:var(--gold-dark)}
+.cta:disabled{background:#cbd5e1;cursor:not-allowed;box-shadow:none}
+.cta.teal{background:var(--teal);box-shadow:0 4px 14px rgba(95,144,137,.35)}
+.cta.teal:active{background:var(--teal-dark)}
+
+.admin-link{display:block;width:100%;margin-top:20px;background:transparent;border:none;color:var(--muted);font:500 .82rem 'DM Sans',sans-serif;cursor:pointer;padding:14px;text-align:center;text-decoration:underline;min-height:44px}
+.admin-link:active{color:var(--navy)}
+
+/* ── DECK SCREEN ── */
+#deck-screen{padding:0}
+.deck-topbar{background:#fff;border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;font-size:.85rem;color:var(--muted);position:sticky;top:var(--header-h);z-index:50}
+.progress-text{font-weight:600;color:var(--navy)}
+.quit-link{color:var(--muted);text-decoration:underline;font-size:.8rem;cursor:pointer;background:none;border:none;padding:6px 8px}
+.progress-bar{height:3px;background:var(--border);overflow:hidden}
+.progress-fill{height:100%;background:var(--teal);transition:width .4s ease}
+
+.card-stage{padding:20px 18px 28px;max-width:560px;margin:0 auto}
+.card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 6px 24px rgba(15,34,64,.08);position:relative;animation:slideIn .35s ease}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.card.exit-left{animation:slideOutLeft .3s ease forwards}
+.card.exit-right{animation:slideOutRight .3s ease forwards}
+@keyframes slideOutLeft{to{opacity:0;transform:translateX(-30px)}}
+@keyframes slideOutRight{to{opacity:0;transform:translateX(30px)}}
+.color-band{height:6px;width:100%}
+.card-body{padding:22px 22px 18px}
+.item-name{font-family:'DM Serif Display',serif;font-size:1.7rem;line-height:1.15;color:var(--navy);margin-bottom:6px}
+.item-location{color:var(--teal);font-size:.95rem;font-weight:600;line-height:1.4;display:flex;align-items:flex-start;gap:6px}
+.item-location::before{content:"📍";font-size:.9rem}
+
+.photo-carousel{position:relative;background:#f8fafc;border-top:1px solid var(--border);border-bottom:1px solid var(--border);min-height:240px;display:flex;align-items:center;justify-content:center}
+.photo-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;width:100%}
+.photo-track::-webkit-scrollbar{display:none}
+.photo-slide{flex:0 0 100%;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;min-height:280px;padding:14px}
+.photo-slide img{max-width:100%;max-height:320px;border-radius:8px;object-fit:contain;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.photo-empty{color:var(--muted);font-size:.85rem;padding:60px 20px;text-align:center}
+.photo-dots{display:flex;justify-content:center;gap:6px;padding:10px 0 4px}
+.photo-dot{width:7px;height:7px;border-radius:50%;background:var(--border)}
+.photo-dot.active{background:var(--teal);width:18px;border-radius:4px}
+
+/* Card flip */
+.card-inner{position:relative}
+.card-face{transform-origin:center}
+.card-face.flipping-out{animation:flipOutSide .22s ease-in forwards}
+.card-face.flipping-in{animation:flipInSide .26s ease-out forwards}
+@keyframes flipOutSide{from{transform:scaleX(1);opacity:1}to{transform:scaleX(0.04);opacity:.3}}
+@keyframes flipInSide{from{transform:scaleX(0.04);opacity:.3}to{transform:scaleX(1);opacity:1}}
+
+.face-label{font-size:.7rem;letter-spacing:.15em;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase}
+.item-location-text{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--navy);line-height:1.25}
+.location-hint{color:var(--muted);font-size:.85rem;margin-top:6px;line-height:1.4;display:flex;align-items:flex-start;gap:6px}
+.location-hint::before{content:"📍"}
+
+.flip-hint{background:#fff;border:none;border-top:1px solid var(--border);width:100%;padding:18px;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--teal);font:600 .95rem 'DM Sans',sans-serif;cursor:pointer;min-height:54px}
+.flip-hint:active{background:var(--bg)}
+.flip-hint .flip-ico{width:32px;height:32px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1rem}
+
+.flip-back-btn{background:none;border:none;color:var(--muted);font:500 .82rem 'DM Sans',sans-serif;padding:8px;cursor:pointer;text-decoration:underline;align-self:center;margin-top:4px}
+.flip-back-btn:active{color:var(--teal)}
+
+.card-actions{padding:16px 18px 22px;display:flex;flex-direction:column;gap:10px}
+.choice-btn{border:1.5px solid transparent;border-radius:14px;padding:18px;font:700 1rem 'DM Sans',sans-serif;cursor:pointer;min-height:60px;letter-spacing:.02em;transition:transform .15s,background .15s;display:flex;align-items:center;justify-content:center;gap:10px}
+.choice-btn .ico-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;flex-shrink:0}
+.choice-btn .ico{position:relative;z-index:2;font-size:1.2rem;line-height:1;display:block;transform-origin:center}
+.choice-btn .burst{position:absolute;top:50%;left:50%;width:54px;height:54px;margin:-27px 0 0 -27px;pointer-events:none;opacity:0}
+.choice-btn:active{transform:scale(.97)}
+.choice-btn.knew{background:var(--gold-soft);color:var(--gold-soft-text);border-color:rgba(176,119,88,.15)}
+.choice-btn.now{background:var(--teal-soft);color:var(--teal);border-color:rgba(95,144,137,.15)}
+.choice-btn.popped{animation:btnNudge .35s ease}
+.choice-btn.popped .ico{animation:icoPop .45s cubic-bezier(.34,1.56,.64,1)}
+.choice-btn.popped .burst{animation:burstOut .55s ease-out}
+@keyframes btnNudge{0%{transform:scale(1)}40%{transform:scale(1.025)}100%{transform:scale(1)}}
+@keyframes icoPop{0%{transform:scale(1)}35%{transform:scale(1.55)}70%{transform:scale(.92)}100%{transform:scale(1)}}
+@keyframes burstOut{0%{opacity:0;transform:scale(.35)}25%{opacity:.95;transform:scale(.9)}55%{opacity:.7;transform:scale(1.15)}100%{opacity:0;transform:scale(1.4)}}
+
+.swipe-hint{text-align:center;color:var(--muted);font-size:.72rem;padding:6px 0 0}
+
+/* ── DIVIDER CARD ── */
+.divider-card{min-height:60vh;display:flex;align-items:center;justify-content:center;padding:40px 24px;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.divider-inner{background:#fff;border-radius:18px;padding:40px 28px;text-align:center;max-width:420px;width:100%;border-top:8px solid var(--chunk-color,var(--teal));box-shadow:0 8px 28px rgba(15,34,64,.08)}
+.divider-check{width:64px;height:64px;border-radius:50%;background:var(--chunk-color,var(--teal));color:#fff;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px}
+.divider-msg{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--navy);line-height:1.2;margin-bottom:8px}
+.divider-next{color:var(--muted);font-size:.9rem}
+.divider-skip{margin-top:24px;background:none;border:1px solid var(--border);border-radius:24px;padding:10px 22px;color:var(--muted);font:500 .85rem 'DM Sans',sans-serif;cursor:pointer;min-height:42px}
+
+/* ── COMPLETE SCREEN ── */
+.complete-hero{text-align:center;padding:24px 0 8px}
+.complete-hero h2{font-family:'DM Serif Display',serif;font-size:1.7rem;color:var(--navy);margin-bottom:8px;line-height:1.15}
+.complete-hero .sub{color:var(--muted);font-size:.95rem}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+.stat-num{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--navy);line-height:1}
+.stat-label{font-size:.75rem;color:var(--muted);margin-top:4px;letter-spacing:.02em}
+.revisit-block{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:18px}
+.revisit-title{font-weight:600;font-size:.85rem;color:var(--navy);margin-bottom:8px}
+.revisit-list{font-size:.85rem;color:var(--text);line-height:1.6}
+.token-block{background:linear-gradient(135deg,var(--gold) 0%,var(--gold-light) 100%);color:#fff;border-radius:16px;padding:22px 18px;text-align:center;margin-top:18px;box-shadow:0 8px 22px rgba(201,127,94,.35)}
+.token-label{font-size:.75rem;letter-spacing:.15em;font-weight:600;margin-bottom:8px;opacity:.9}
+.token-code{font-family:'DM Serif Display',serif;font-size:2.2rem;letter-spacing:.15em;line-height:1;margin-bottom:8px}
+.token-hint{font-size:.78rem;opacity:.9;line-height:1.4}
+.submit-status{text-align:center;padding:12px;border-radius:10px;font-size:.85rem;margin-top:10px}
+.submit-status.queued{background:#fef3c7;color:#92400e}
+.submit-status.error{background:#fee2e2;color:#991b1b}
+
+/* ── ADMIN ── */
+#admin-screen{padding:0}
+.admin-bar{background:#fff;border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:8px;position:sticky;top:var(--header-h);z-index:50}
+.admin-tabs{display:flex;flex:1;background:var(--bg);border-radius:10px;padding:3px;gap:3px}
+.admin-tab{flex:1;border:none;background:transparent;padding:10px;border-radius:8px;font:600 .85rem 'DM Sans',sans-serif;color:var(--muted);cursor:pointer;min-height:40px}
+.admin-tab.active{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.admin-actions{display:flex;gap:6px}
+.btn-mini{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:9px 12px;font:600 .78rem 'DM Sans',sans-serif;cursor:pointer;min-height:38px}
+.btn-mini.outline{background:#fff;color:var(--navy);border:1px solid var(--border)}
+.btn-mini.gold{background:var(--gold)}
+
+.admin-content{padding:14px 14px 60px;max-width:680px;margin:0 auto}
+.chunk-row{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.chunk-swatch{width:24px;height:24px;border-radius:6px;flex-shrink:0}
+.chunk-row-info{flex:1;min-width:0}
+.chunk-row-name{font-weight:600;font-size:.95rem;color:var(--navy)}
+.chunk-row-meta{font-size:.75rem;color:var(--muted);margin-top:2px}
+.chunk-row-actions{display:flex;gap:4px}
+.icon-btn{background:none;border:none;font-size:1.1rem;padding:6px;cursor:pointer;color:var(--muted);min-width:34px;min-height:34px;border-radius:6px}
+.icon-btn:active{background:var(--bg)}
+
+.item-group{margin-bottom:18px;border-radius:10px;overflow:hidden;background:#fff;border:1px solid var(--border)}
+.item-group-header{padding:12px;display:flex;align-items:center;gap:8px;font-weight:600;font-size:.88rem;color:#fff;cursor:pointer;transition:filter .15s;min-height:44px}
+.item-group-header:active{filter:brightness(.9)}
+.ig-edit-ico{margin-left:auto;opacity:.85;font-size:.82rem;font-weight:500;background:rgba(255,255,255,.18);padding:3px 8px;border-radius:10px;white-space:nowrap}
+.item-row{padding:10px 12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;background:#fff}
+.item-row-thumb{width:42px;height:42px;border-radius:6px;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.7rem;overflow:hidden;flex-shrink:0}
+.item-row-thumb img{width:100%;height:100%;object-fit:contain;background:#fff}
+.item-row-info{flex:1;min-width:0}
+.item-row-name{font-weight:600;font-size:.9rem;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item-row-loc{font-size:.75rem;color:var(--muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Item edit form */
+.edit-form{background:#fff;border-radius:12px;padding:18px;border:1px solid var(--border)}
+.edit-form .field-label{margin-top:14px}
+.edit-form .field-label:first-child{margin-top:0}
+.select-input{width:100%;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;font:400 1rem 'DM Sans',sans-serif;color:var(--text);min-height:48px;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%2364748b' d='M6 8L0 0h12z'/></svg>");background-repeat:no-repeat;background-position:right 16px center}
+
+.photo-manager{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px;min-height:64px;border-radius:10px;padding:4px;outline:2px dashed transparent;outline-offset:2px;transition:background .15s,outline-color .15s}
+.photo-manager.drag-over{background:rgba(95,144,137,.08);outline-color:var(--teal)}
+.dropzone-empty{grid-column:1/-1;text-align:center;padding:22px 12px;color:var(--muted);font-size:.85rem;line-height:1.5;border:2px dashed var(--border);border-radius:10px;pointer-events:none}
+.dropzone-empty .small{display:block;font-size:.78rem;opacity:.75;margin-top:4px}
+.photo-manager.drag-over .dropzone-empty{border-color:var(--teal);color:var(--teal)}
+.photo-tile{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:#fff;border:1.5px solid var(--border)}
+.photo-tile img{width:100%;height:100%;object-fit:contain;background:#fff}
+.photo-tile .remove{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;border:none;cursor:pointer;font-size:.9rem}
+.photo-add-tile{aspect-ratio:1;border:2px dashed var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);font-size:.8rem;cursor:pointer;background:var(--bg)}
+.photo-add-tile:active{border-color:var(--teal);color:var(--teal)}
+/* Chunk editor — per-item cards */
+.chunk-items-section{margin-top:20px;padding-top:18px;border-top:2px solid var(--border)}
+.chunk-items-header{margin-bottom:10px;font:700 .85rem 'DM Sans',sans-serif;color:var(--navy)}
+.chunk-editor-item{background:var(--bg);border-radius:12px;padding:12px;margin-bottom:10px;border:1px solid var(--border)}
+.chunk-editor-item .item-head{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.chunk-editor-item .item-name-input{flex:1;border:1.5px solid var(--border);background:#fff;font:600 .95rem 'DM Sans',sans-serif;color:var(--navy);padding:9px 10px;border-radius:8px;min-height:42px;outline:none}
+.chunk-editor-item .item-name-input:focus{border-color:var(--teal)}
+.chunk-editor-item .item-loc-input{width:100%;border:1.5px solid var(--border);background:#fff;font:400 .88rem 'DM Sans',sans-serif;color:var(--text);padding:9px 10px;border-radius:8px;margin-bottom:10px;min-height:42px;outline:none}
+.chunk-editor-item .item-loc-input:focus{border-color:var(--teal)}
+.chunk-editor-item .photo-block{background:#fff;border-radius:8px;padding:10px;margin-top:8px;border:1px solid var(--border)}
+.chunk-editor-item .photo-block-label{font:600 .75rem 'DM Sans',sans-serif;color:var(--navy);margin-bottom:6px;letter-spacing:.02em;text-transform:uppercase}
+.chunk-editor-item .photo-source-btn{padding:9px 4px;font-size:.78rem;min-height:42px}
+.chunk-editor-item .photo-manager{margin-top:6px;min-height:48px}
+.chunk-editor-item .dropzone-empty{padding:14px 8px;font-size:.78rem}
+.chunk-editor-add{width:100%;padding:14px;border:2px dashed var(--border);background:transparent;border-radius:12px;color:var(--muted);font:600 .9rem 'DM Sans',sans-serif;cursor:pointer;min-height:48px;margin-top:6px}
+.chunk-editor-add:active{border-color:var(--teal);color:var(--teal);background:rgba(95,144,137,.05)}
+.cei-empty{padding:18px;text-align:center;color:var(--muted);font-size:.85rem;border:1.5px dashed var(--border);border-radius:10px}
+
+.photo-source-row{display:flex;gap:8px;margin-top:10px}
+.photo-source-btn{flex:1;background:var(--bg);border:1.5px dashed var(--border);border-radius:10px;padding:14px 8px;font:600 .82rem 'DM Sans',sans-serif;color:var(--text);cursor:pointer;text-align:center;min-height:50px}
+.photo-source-btn:active{background:#e2e8f0;border-color:var(--teal)}
+
+/* ── DIALOG / SHEET ── */
+.sheet-backdrop{position:fixed;inset:0;background:rgba(15,34,64,.5);z-index:400;display:none;align-items:flex-end;justify-content:center;padding:20px}
+.sheet-backdrop.active{display:flex}
+.sheet{background:#fff;border-radius:18px;width:100%;max-width:480px;padding:20px;max-height:88vh;overflow-y:auto;animation:sheetIn .25s ease}
+@keyframes sheetIn{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.sheet h3{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--navy);margin-bottom:14px}
+.sheet-actions{display:flex;gap:8px;margin-top:18px}
+.sheet-actions button{flex:1;min-height:48px;border-radius:12px;font:600 .9rem 'DM Sans',sans-serif;cursor:pointer;border:none}
+.sheet-actions .cancel{background:var(--bg);color:var(--text)}
+.sheet-actions .confirm{background:var(--teal);color:#fff}
+.sheet-actions .danger{background:#dc2626;color:#fff}
+
+/* ── PIN PAD ── */
+.pin-display{font-family:'DM Serif Display',serif;font-size:2rem;letter-spacing:.6rem;text-align:center;padding:14px;background:var(--bg);border-radius:12px;margin:12px 0 18px;color:var(--navy)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pin-key{background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:18px;font:600 1.4rem 'DM Sans',sans-serif;color:var(--navy);cursor:pointer;min-height:60px}
+.pin-key:active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.pin-key.clear{font-size:.85rem;color:var(--muted)}
+.pin-error{color:#dc2626;font-size:.82rem;text-align:center;margin-top:8px;min-height:18px}
+
+/* ── COLOR SWATCH PICKER ── */
+.swatch-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}
+.swatch{aspect-ratio:1;border-radius:8px;cursor:pointer;border:3px solid transparent}
+.swatch.selected{border-color:var(--navy);transform:scale(1.08)}
+
+/* ── CONFETTI CANVAS ── */
+#confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:500}
+
+/* ── COMPLETED OVERLAY (chunk done sparkle) ── */
+.sparkle{position:fixed;font-size:2rem;pointer-events:none;animation:sparkleUp 1.2s ease-out forwards;z-index:450}
+@keyframes sparkleUp{0%{opacity:1;transform:translateY(0) scale(0.5)}100%{opacity:0;transform:translateY(-80px) scale(1.2)}}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 18px;border-radius:24px;font-size:.88rem;z-index:600;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90vw}
+.toast.show{opacity:1}
+
+@media(min-width:600px){
+  #welcome-screen .hero{padding:50px 0 32px}
+  .item-name{font-size:2rem}
+}
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <div class="header-left">
+    <div class="conf-title" id="hdr-title">Crani Cards</div>
+    <div class="conf-sub">SUMMER '26</div>
+  </div>
+  <div id="header-action"></div>
+</header>
+
+<main id="app">
+
+  <!-- ── WELCOME ── -->
+  <section id="welcome-screen" class="screen active">
+    <div class="screen-inner">
+      <div class="hero">
+        <h1>Crani Cards</h1>
+        <p class="tagline">Walk through the case. Tap how you feel about each item. Finish for a prize.</p>
+      </div>
+
+      <div class="form-block">
+        <label class="field-label">Your role <span style="color:#dc2626">*</span></label>
+        <div class="role-grid" id="role-grid">
+          <button class="role-chip" data-role="RN">RN</button>
+          <button class="role-chip" data-role="Scrub">Scrub</button>
+          <button class="role-chip" data-role="SA">SA</button>
+          <button class="role-chip" data-role="Support">Support</button>
+        </div>
+
+        <button class="cta" id="start-btn" disabled>Start</button>
+      </div>
+
+      <button class="admin-link" id="admin-link">⚙ Edit cards (admin)</button>
+    </div>
+  </section>
+
+  <!-- ── DECK ── -->
+  <section id="deck-screen" class="screen">
+    <div class="deck-topbar">
+      <span class="progress-text" id="progress-text">Card 1 / 1</span>
+      <button class="quit-link" id="quit-btn">Quit</button>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div id="card-stage" class="card-stage"></div>
+  </section>
+
+  <!-- ── COMPLETE ── -->
+  <section id="complete-screen" class="screen">
+    <div class="screen-inner">
+      <div class="complete-hero">
+        <h2>🎉 Case built.</h2>
+        <p class="sub" id="complete-sub">You finished all cards.</p>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-num" id="stat-knew">0</div><div class="stat-label">ALREADY KNEW</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-now">0</div><div class="stat-label">NOW I KNOW</div></div>
+      </div>
+      <div class="revisit-block" id="revisit-block" style="display:none">
+        <div class="revisit-title">Items to revisit</div>
+        <div class="revisit-list" id="revisit-list"></div>
+      </div>
+      <div id="submit-area">
+        <button class="cta" id="submit-btn">Submit for prize</button>
+        <div class="field-hint" style="text-align:center;margin-top:8px">Submission is required to claim your prize token.</div>
+        <div class="submit-status" id="submit-status" style="display:none"></div>
+      </div>
+      <div id="token-area" style="display:none">
+        <div class="token-block">
+          <div class="token-label">YOUR PRIZE TOKEN</div>
+          <div class="token-code" id="token-code">------</div>
+          <div class="token-hint">Screenshot this or write it down to claim your prize.</div>
+        </div>
+        <button class="cta teal" id="done-btn" style="margin-top:14px">Done</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ADMIN ── -->
+  <section id="admin-screen" class="screen">
+    <div class="admin-bar">
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="chunks">Chunks</button>
+        <button class="admin-tab" data-tab="items">Items</button>
+      </div>
+      <div class="admin-actions">
+        <button class="btn-mini outline" id="preview-btn">Preview</button>
+        <button class="btn-mini gold" id="export-btn">Export</button>
+      </div>
+    </div>
+    <div class="admin-content" id="admin-content"></div>
+  </section>
+
+</main>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="sheet-backdrop" id="sheet-backdrop">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ────────────────────────────────────────────────
+   CONFIG — paste your Apps Script Web App URL here
+   ──────────────────────────────────────────────── */
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiqTMiETmIZC9iQZixeLNVDI3rICneg7eayD5JpcmD1-463dJMeuL7IHUi94bYwqDX_g/exec"; // e.g. "https://script.google.com/macros/s/AKfy.../exec"
+const APP_VERSION = "Crani Cards Summer '26";
+const ADMIN_PIN = "7217";
+
+/* ────────────────────────────────────────────────
+   DATA — chunks + items (edit in admin → export)
+   ──────────────────────────────────────────────── */
+const DEFAULT_DATA = {
+  chunks: [
+    {id:"c1", name:"Horseshoe positioning", color:"#ef6f6c", divider:"Horseshoe positioning ready"},
+    {id:"c2", name:"Mayfield positioning", color:"#e8a33d", divider:"Mayfield positioning ready"},
+    {id:"c3", name:"Levo head positioning", color:"#a8c66c", divider:"Levo head positioning ready"},
+    {id:"c4", name:"Padding extras", color:"#6b8e23", divider:"Padding ready"},
+    {id:"c5", name:"Bone flap & irrigation meds", color:"#2a7f5f", divider:"Bone flap & meds ready"},
+    {id:"c6", name:"Dura closure", color:"#4ea1d3", divider:"Dura closure ready"},
+    {id:"c7", name:"Burs", color:"#4a4e9c", divider:"Burs ready"},
+    {id:"c8", name:"Drill", color:"#7c5cb8", divider:"Drill ready"},
+    {id:"c9", name:"Bed rotation", color:"#c44b8a", divider:"Bed rotation ready"},
+    {id:"c10", name:"Post-op handoff", color:"#a64242", divider:"ICU handoff ready"},
+    {id:"c11", name:"Documentation", color:"#8b6244", divider:"Documentation ready"},
+  ],
+  items: [
+    {id:"i1", chunkId:"c2", name:"Mayfield skull clamp", location:"Crani bin — top tray", photos:[], locationPhotos:[]},
+    {id:"i2", chunkId:"c2", name:"Mayfield bed attachment", location:"Equipment room — Mayfield rack", photos:[], locationPhotos:[]},
+    {id:"i3", chunkId:"c2", name:"Mayfield attachment with swivel", location:"Equipment room — Mayfield rack (blue tag)", photos:[], locationPhotos:[]},
+    {id:"i4", chunkId:"c5", name:"Bone Flap kit", location:"Specialty cart — drawer 3", photos:[], locationPhotos:[]},
+  ],
+};
+const PALETTE = ["#ef6f6c","#e8a33d","#a8c66c","#6b8e23","#2a7f5f","#4ea1d3","#4a4e9c","#7c5cb8","#c44b8a","#a64242","#8b6244","#0d7377","#c9973e","#0f2240"];
+
+/* App state */
+let DATA = JSON.parse(JSON.stringify(DEFAULT_DATA));
+let session = {
+  role:null, name:"", responses:[], index:0, sequence:[], token:null,
+  submitted:false, submitting:false,
+};
+let adminTab = "chunks";
+
+/* ────────────────────────────────────────────────
+   UTILITIES
+   ──────────────────────────────────────────────── */
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const uid = (p="x") => p + Math.random().toString(36).slice(2,8) + Date.now().toString(36).slice(-4);
+function toast(msg, ms=2200){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.remove("show"), ms);
+}
+function showScreen(name){
+  $$(".screen").forEach(s=>s.classList.remove("active"));
+  $("#"+name+"-screen").classList.add("active");
+  window.scrollTo(0,0);
+  // Header action button
+  const ha = $("#header-action"); ha.innerHTML = "";
+  if(name === "admin"){
+    const back = document.createElement("button");
+    back.className = "hdr-btn"; back.textContent = "Exit admin";
+    back.onclick = ()=>showScreen("welcome");
+    ha.appendChild(back);
+  }
+}
+function openSheet(html, opts={}){
+  $("#sheet").innerHTML = html;
+  $("#sheet-backdrop").classList.add("active");
+  if(opts.onMount) opts.onMount();
+}
+function closeSheet(){ $("#sheet-backdrop").classList.remove("active"); }
+$("#sheet-backdrop").addEventListener("click",e=>{ if(e.target.id==="sheet-backdrop") closeSheet(); });
+
+/* ────────────────────────────────────────────────
+   PASTE-FROM-CLIPBOARD support (works for snipping tool)
+   ──────────────────────────────────────────────── */
+let activePhotoHandler = null; // function(files) — set by whichever photo section was last touched
+async function pasteFromClipboard(handler){
+  // Try the modern Clipboard API first (works if permission granted)
+  if(navigator.clipboard && navigator.clipboard.read){
+    try{
+      const items = await navigator.clipboard.read();
+      const files = [];
+      for(const item of items){
+        for(const type of item.types){
+          if(type.startsWith("image/")){
+            const blob = await item.getType(type);
+            const ext = type.split("/")[1] || "png";
+            files.push(new File([blob], `pasted.${ext}`, {type}));
+          }
+        }
+      }
+      if(files.length){ handler(files); return; }
+    }catch(err){ /* permission denied or unsupported — fall through */ }
+  }
+  // Fallback: ask user to use Ctrl+V
+  toast("Press Ctrl+V (or Cmd+V) to paste your snipped image");
+}
+// Global Ctrl+V handler — routes to last-touched photo section
+document.addEventListener("paste", e=>{
+  if(!activePhotoHandler) return;
+  const cd = e.clipboardData;
+  if(!cd || !cd.items) return;
+  const files = [];
+  for(const item of cd.items){
+    if(item.type && item.type.startsWith("image/")){
+      const f = item.getAsFile();
+      if(f) files.push(f);
+    }
+  }
+  if(files.length){ e.preventDefault(); activePhotoHandler(files); }
+});
+
+/* ────────────────────────────────────────────────
+   CONFETTI (compact custom)
+   ──────────────────────────────────────────────── */
+const cfCanvas = $("#confetti-canvas");
+const cfCtx = cfCanvas.getContext("2d");
+function fitCanvas(){ cfCanvas.width = innerWidth; cfCanvas.height = innerHeight; }
+fitCanvas(); addEventListener("resize", fitCanvas);
+let particles = []; let cfRunning = false;
+function burst(x, y, colors=["#c9973e","#0d7377","#f0bc5e","#14a8a8"], count=42){
+  for(let i=0;i<count;i++){
+    const angle = Math.random()*Math.PI*2;
+    const speed = 4 + Math.random()*6;
+    particles.push({
+      x,y,
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed - 3,
+      g:0.18,
+      size: 5 + Math.random()*5,
+      color: colors[i % colors.length],
+      rot: Math.random()*Math.PI,
+      vr: (Math.random()-0.5)*0.3,
+      life: 80 + Math.random()*30,
+      shape: Math.random()<0.5 ? "rect" : "circle",
+    });
+  }
+  if(!cfRunning){ cfRunning = true; requestAnimationFrame(cfTick); }
+}
+function cfTick(){
+  cfCtx.clearRect(0,0,cfCanvas.width,cfCanvas.height);
+  particles = particles.filter(p=>p.life>0);
+  for(const p of particles){
+    p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life--;
+    cfCtx.save();
+    cfCtx.translate(p.x,p.y); cfCtx.rotate(p.rot);
+    cfCtx.fillStyle = p.color; cfCtx.globalAlpha = Math.max(0,Math.min(1,p.life/40));
+    if(p.shape==="rect") cfCtx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);
+    else{ cfCtx.beginPath(); cfCtx.arc(0,0,p.size/2,0,Math.PI*2); cfCtx.fill(); }
+    cfCtx.restore();
+  }
+  if(particles.length){ requestAnimationFrame(cfTick); } else { cfRunning = false; }
+}
+function sparkleAt(x,y){
+  const el = document.createElement("div");
+  el.className = "sparkle"; el.textContent = "✨";
+  el.style.left = (x-16)+"px"; el.style.top = (y-16)+"px";
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 1300);
+}
+
+/* ────────────────────────────────────────────────
+   WELCOME → start
+   ──────────────────────────────────────────────── */
+$$("#role-grid .role-chip").forEach(b=>{
+  b.addEventListener("click", ()=>{
+    $$("#role-grid .role-chip").forEach(x=>x.classList.remove("selected"));
+    b.classList.add("selected");
+    session.role = b.dataset.role;
+    $("#start-btn").disabled = false;
+  });
+});
+$("#start-btn").addEventListener("click", ()=>{
+  if(!session.role){ toast("Pick a role first"); return; }
+  startDeck();
+});
+
+/* ────────────────────────────────────────────────
+   DECK — build sequence (cards + dividers)
+   ──────────────────────────────────────────────── */
+function startDeck(){
+  session.responses = [];
+  session.index = 0;
+  session.sequence = buildSequence();
+  if(session.sequence.length === 0){ toast("No cards yet — ask admin"); return; }
+  showScreen("deck");
+  renderCard();
+}
+function buildSequence(){
+  // Group items by chunk in chunk-order
+  const seq = [];
+  for(const ch of DATA.chunks){
+    const its = DATA.items.filter(i=>i.chunkId===ch.id);
+    if(its.length===0) continue;
+    for(const it of its){ seq.push({type:"card", item:it, chunk:ch}); }
+    seq.push({type:"divider", chunk:ch});
+  }
+  // Remove the last divider if it's the very last (so we go straight to complete)
+  // But actually keep it — it gives a satisfying "Documentation ready" before completion
+  return seq;
+}
+function totalCards(){ return session.sequence.filter(s=>s.type==="card").length; }
+
+function renderCard(){
+  const stage = $("#card-stage"); stage.innerHTML = "";
+  const node = session.sequence[session.index];
+  if(!node){ finishDeck(); return; }
+  // Update progress
+  const cardsSoFar = session.sequence.slice(0,session.index+1).filter(s=>s.type==="card").length;
+  const total = totalCards();
+  $("#progress-text").textContent = node.type==="card" ? `Card ${cardsSoFar} / ${total}` : "Chunk complete";
+  $("#progress-fill").style.width = ((session.index+1)/session.sequence.length*100) + "%";
+
+  if(node.type === "divider"){
+    renderDivider(node);
+  } else {
+    renderItemCard(node);
+  }
+}
+function photoCarouselHtml(photos, emptyMsg){
+  if(!photos || photos.length===0) return `<div class="photo-empty">${escapeHtml(emptyMsg||"No photos yet.")}</div>`;
+  return `<div class="photo-track">${photos.map(p=>`<div class="photo-slide"><img src="${p}" alt=""></div>`).join("")}</div>`;
+}
+function photoDotsHtml(photos){
+  if(!photos || photos.length <= 1) return "";
+  return `<div class="photo-dots">${photos.map((_,i)=>`<span class="photo-dot${i===0?" active":""}"></span>`).join("")}</div>`;
+}
+function renderFrontFace(item){
+  return `
+    <div class="card-face card-front" data-face="front">
+      <div class="card-body">
+        <div class="face-label">Item</div>
+        <div class="item-name">${escapeHtml(item.name)}</div>
+      </div>
+      <div class="photo-carousel">
+        ${photoCarouselHtml(item.photos, "No photos of this item yet.")}
+      </div>
+      ${photoDotsHtml(item.photos)}
+      <button class="flip-hint" data-act="flip-to-back">
+        <span class="flip-ico">↻</span>
+        Tap to see where it lives
+      </button>
+    </div>
+  `;
+}
+function renderBackFace(item, chunk){
+  return `
+    <div class="card-face card-back" data-face="back">
+      <div class="card-body">
+        <div class="face-label" style="color:${chunk.color}">📍 Where to find it</div>
+        <div class="item-location-text">${escapeHtml(item.location || "Location not yet set")}</div>
+      </div>
+      <div class="photo-carousel">
+        ${photoCarouselHtml(item.locationPhotos, "No location photos yet.")}
+      </div>
+      ${photoDotsHtml(item.locationPhotos)}
+      <div class="card-actions">
+        <button class="choice-btn knew" data-choice="knew">
+          <span class="ico-wrap">
+            <span class="ico">✓</span>
+            <svg class="burst" viewBox="-20 -20 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none">
+                <line x1="0" y1="-9" x2="0" y2="-16"/>
+                <line x1="6.4" y1="-6.4" x2="11.3" y2="-11.3"/>
+                <line x1="9" y1="0" x2="16" y2="0"/>
+                <line x1="6.4" y1="6.4" x2="11.3" y2="11.3"/>
+                <line x1="0" y1="9" x2="0" y2="16"/>
+                <line x1="-6.4" y1="6.4" x2="-11.3" y2="11.3"/>
+                <line x1="-9" y1="0" x2="-16" y2="0"/>
+                <line x1="-6.4" y1="-6.4" x2="-11.3" y2="-11.3"/>
+              </g>
+            </svg>
+          </span>
+          I already knew this
+        </button>
+        <button class="choice-btn now" data-choice="now">
+          <span class="ico-wrap">
+            <span class="ico">💡</span>
+            <svg class="burst" viewBox="-20 -20 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none">
+                <line x1="0" y1="-9" x2="0" y2="-16"/>
+                <line x1="6.4" y1="-6.4" x2="11.3" y2="-11.3"/>
+                <line x1="9" y1="0" x2="16" y2="0"/>
+                <line x1="6.4" y1="6.4" x2="11.3" y2="11.3"/>
+                <line x1="0" y1="9" x2="0" y2="16"/>
+                <line x1="-6.4" y1="6.4" x2="-11.3" y2="11.3"/>
+                <line x1="-9" y1="0" x2="-16" y2="0"/>
+                <line x1="-6.4" y1="-6.4" x2="-11.3" y2="-11.3"/>
+              </g>
+            </svg>
+          </span>
+          Now I know this
+        </button>
+        <button class="flip-back-btn" data-act="flip-to-front">↻ See item again</button>
+      </div>
+    </div>
+  `;
+}
+function renderItemCard(node){
+  const { item, chunk } = node;
+  const stage = $("#card-stage");
+  const card = document.createElement("div");
+  card.className = "card";
+  card.dataset.side = "front";
+  card.innerHTML = `
+    <div class="color-band" style="background:${chunk.color}"></div>
+    <div class="card-inner">${renderFrontFace(item)}</div>
+  `;
+  stage.appendChild(card);
+  wireCardSide(card, item, chunk);
+  attachSwipe(card);
+}
+function wireCardSide(card, item, chunk){
+  // Photo carousel — dots sync
+  const track = card.querySelector(".photo-track");
+  if(track){
+    track.addEventListener("scroll", ()=>{
+      const i = Math.round(track.scrollLeft / track.clientWidth);
+      const dots = card.querySelectorAll(".photo-dot");
+      dots.forEach((d,j)=>d.classList.toggle("active", j===i));
+    },{passive:true});
+  }
+  // Flip buttons
+  const flipBtn = card.querySelector('[data-act="flip-to-back"]');
+  if(flipBtn) flipBtn.onclick = e=>{ e.stopPropagation(); flipCardTo(card, "back", item, chunk); };
+  const flipBackBtn = card.querySelector('[data-act="flip-to-front"]');
+  if(flipBackBtn) flipBackBtn.onclick = e=>{ e.stopPropagation(); flipCardTo(card, "front", item, chunk); };
+  // Choice buttons (only on back) — YouTube-style icon pop + radial ticks
+  card.querySelectorAll(".choice-btn").forEach(b=>{
+    b.addEventListener("click", e=>{
+      e.stopPropagation();
+      // Re-trigger animation: remove then add the class on next frame
+      b.classList.remove("popped");
+      void b.offsetWidth; // force reflow so the animation can replay
+      b.classList.add("popped");
+      if(navigator.vibrate) navigator.vibrate(12);
+      recordResponse(item.id, b.dataset.choice);
+      // Wait long enough for the icon pop + burst (~550ms) before advancing
+      setTimeout(()=>advance(1), 480);
+    });
+  });
+}
+function flipCardTo(card, side, item, chunk){
+  if(card.dataset.side === side) return;
+  const inner = card.querySelector(".card-inner");
+  const oldFace = inner.firstElementChild;
+  oldFace.classList.add("flipping-out");
+  if(navigator.vibrate) navigator.vibrate(8);
+  setTimeout(()=>{
+    inner.innerHTML = side === "back" ? renderBackFace(item, chunk) : renderFrontFace(item);
+    const newFace = inner.firstElementChild;
+    newFace.classList.add("flipping-in");
+    card.dataset.side = side;
+    wireCardSide(card, item, chunk);
+    setTimeout(()=>newFace.classList.remove("flipping-in"), 280);
+  }, 200);
+}
+function renderDivider(node){
+  const { chunk } = node;
+  const stage = $("#card-stage");
+  const nextNode = session.sequence.slice(session.index+1).find(s=>s.type==="card" || s.type==="divider");
+  const nextLabel = nextNode ? (nextNode.chunk.name + " next") : "All done!";
+  const div = document.createElement("div");
+  div.className = "divider-card";
+  div.innerHTML = `
+    <div class="divider-inner" style="--chunk-color:${chunk.color}">
+      <div class="divider-check">✓</div>
+      <div class="divider-msg">${escapeHtml(chunk.divider || (chunk.name + " ready"))}</div>
+      <div class="divider-next">${escapeHtml(nextLabel)}</div>
+      <button class="divider-skip" id="divider-skip">Continue ›</button>
+    </div>
+  `;
+  stage.appendChild(div);
+  // subtle sparkle
+  setTimeout(()=>{
+    const r = div.querySelector(".divider-check").getBoundingClientRect();
+    sparkleAt(r.left + r.width/2, r.top + r.height/2);
+    sparkleAt(r.left + r.width/2 - 30, r.top + r.height/2 + 10);
+    sparkleAt(r.left + r.width/2 + 30, r.top + r.height/2 + 10);
+  }, 200);
+  // Auto-advance
+  const timer = setTimeout(()=>advance(1), 1500);
+  div.querySelector("#divider-skip").addEventListener("click", ()=>{ clearTimeout(timer); advance(1); });
+  attachSwipe(div);
+}
+function attachSwipe(el){
+  let sx=0, sy=0, t0=0, startedOnButton=false;
+  el.addEventListener("touchstart", e=>{
+    const t=e.touches[0]; sx=t.clientX; sy=t.clientY; t0=Date.now();
+    startedOnButton = !!e.target.closest("button, .choice-btn, .flip-hint, .flip-back-btn");
+  },{passive:true});
+  el.addEventListener("touchend", e=>{
+    if(startedOnButton) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - sx; const dy = t.clientY - sy;
+    if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) && Date.now()-t0 < 500){
+      if(e.target.closest(".photo-track")) return;
+      const node = session.sequence[session.index];
+      if(node && node.type==="card"){
+        const hasResponse = session.responses.some(r=>r.itemId===node.item.id);
+        if(!hasResponse) return;
+      }
+      if(dx < 0) advance(1); else advance(-1);
+    }
+  },{passive:true});
+}
+function recordResponse(itemId, choice){
+  // Remove any prior response for this item (in case of back/forward)
+  session.responses = session.responses.filter(r=>r.itemId !== itemId);
+  session.responses.push({ itemId, choice, at: Date.now() });
+}
+function advance(dir){
+  const stage = $("#card-stage");
+  const current = stage.firstElementChild;
+  if(current){ current.classList.add(dir>0 ? "exit-left" : "exit-right"); }
+  setTimeout(()=>{
+    session.index += dir;
+    if(session.index < 0) session.index = 0;
+    if(session.index >= session.sequence.length){ finishDeck(); return; }
+    renderCard();
+  }, dir>0 ? 200 : 0);
+}
+$("#quit-btn").addEventListener("click", ()=>{
+  openSheet(`
+    <h3>Quit and lose progress?</h3>
+    <p style="color:var(--muted);font-size:.9rem">Your responses so far won't be saved. You'll need to start over to claim a prize.</p>
+    <div class="sheet-actions">
+      <button class="cancel" onclick="closeSheet()">Keep going</button>
+      <button class="danger" id="quit-confirm">Quit</button>
+    </div>
+  `, {onMount:()=>{
+    $("#quit-confirm").onclick = ()=>{ closeSheet(); resetSession(); showScreen("welcome"); };
+  }});
+});
+function resetSession(){
+  session = { role:null, name:"", responses:[], index:0, sequence:[], token:null, submitted:false, submitting:false };
+  $$("#role-grid .role-chip").forEach(x=>x.classList.remove("selected"));
+  $("#start-btn").disabled = true;
+  $("#submit-area").style.display = "";
+  $("#token-area").style.display = "none";
+  $("#submit-status").style.display = "none";
+}
+
+/* ────────────────────────────────────────────────
+   COMPLETION + SUBMIT
+   ──────────────────────────────────────────────── */
+function finishDeck(){
+  const totalC = totalCards();
+  const knew = session.responses.filter(r=>r.choice==="knew").length;
+  const now = session.responses.filter(r=>r.choice==="now").length;
+  $("#complete-sub").textContent = `You finished all ${totalC} cards.`;
+  $("#stat-knew").textContent = knew;
+  $("#stat-now").textContent = now;
+  const nowItems = session.responses.filter(r=>r.choice==="now").map(r=>{
+    const it = DATA.items.find(i=>i.id===r.itemId); return it ? it.name : null;
+  }).filter(Boolean);
+  if(nowItems.length){
+    $("#revisit-block").style.display = "";
+    $("#revisit-list").innerHTML = nowItems.map(n=>`• ${escapeHtml(n)}`).join("<br>");
+  } else { $("#revisit-block").style.display = "none"; }
+  showScreen("complete");
+  // big confetti
+  setTimeout(()=>burst(innerWidth/2, innerHeight*0.3, ["#c9973e","#0d7377","#f0bc5e","#14a8a8","#a8c66c"], 70), 250);
+}
+$("#submit-btn").addEventListener("click", submitResults);
+async function submitResults(){
+  if(session.submitting || session.submitted) return;
+  session.submitting = true;
+  const btn = $("#submit-btn"); btn.disabled = true; btn.textContent = "Submitting…";
+  const status = $("#submit-status");
+  const totalC = totalCards();
+  const knew = session.responses.filter(r=>r.choice==="knew").length;
+  const now = session.responses.filter(r=>r.choice==="now").length;
+  const nowItems = session.responses.filter(r=>r.choice==="now").map(r=>{
+    const it = DATA.items.find(i=>i.id===r.itemId); return it ? it.name : "";
+  }).filter(Boolean);
+  // Chunk breakdown for "now" items
+  const chunkUnknownMap = {};
+  for(const r of session.responses){
+    if(r.choice!=="now") continue;
+    const it = DATA.items.find(i=>i.id===r.itemId); if(!it) continue;
+    const ch = DATA.chunks.find(c=>c.id===it.chunkId); if(!ch) continue;
+    chunkUnknownMap[ch.name] = (chunkUnknownMap[ch.name]||0) + 1;
+  }
+  const chunksWithUnknowns = Object.entries(chunkUnknownMap).sort((a,b)=>b[1]-a[1]).map(([n,c])=>`${n} (${c})`).join("; ");
+
+  const payload = {
+    timestamp: new Date().toISOString(),
+    role: session.role,
+    total_cards: totalC,
+    already_knew_count: knew,
+    now_know_count: now,
+    items_marked_now_know: nowItems.join("; "),
+    chunks_with_unknowns: chunksWithUnknowns,
+    app_version: APP_VERSION,
+  };
+
+  if(!APPS_SCRIPT_URL){
+    // No URL configured — local-only token for testing
+    const token = makeLocalToken();
+    session.token = token; session.submitted = true; session.submitting = false;
+    revealToken(token);
+    status.className = "submit-status queued"; status.style.display = "block";
+    status.textContent = "⚠ No Google Sheet URL set yet — token shown for demo only.";
+    return;
+  }
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method:"POST",
+      mode:"cors",
+      headers:{"Content-Type":"text/plain;charset=utf-8"}, // text/plain avoids CORS preflight for Apps Script
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if(data && data.token){
+      session.token = data.token; session.submitted = true; session.submitting = false;
+      revealToken(data.token);
+    } else { throw new Error("No token in response"); }
+  } catch(err){
+    // Queue locally — token will appear on retry
+    queueSubmission(payload);
+    btn.disabled = false; btn.textContent = "Retry submit";
+    status.className = "submit-status queued"; status.style.display = "block";
+    status.textContent = "📡 Saved offline. Token will appear once we reconnect — tap Retry submit.";
+    session.submitting = false;
+  }
+}
+function makeLocalToken(){
+  const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+  let t = ""; for(let i=0;i<6;i++) t += chars[Math.floor(Math.random()*chars.length)];
+  return t;
+}
+function revealToken(token){
+  $("#submit-area").style.display = "none";
+  $("#token-area").style.display = "block";
+  $("#token-code").textContent = token;
+  setTimeout(()=>burst(innerWidth/2, innerHeight*0.35, ["#c9973e","#f0bc5e","#fff"], 60), 200);
+}
+$("#done-btn").addEventListener("click", ()=>{ resetSession(); showScreen("welcome"); });
+function queueSubmission(payload){
+  try{
+    const q = JSON.parse(localStorage.getItem("crani_queue")||"[]");
+    q.push(payload); localStorage.setItem("crani_queue", JSON.stringify(q));
+  }catch(e){}
+}
+
+/* ────────────────────────────────────────────────
+   ADMIN MODE entry — visible button + gestures
+   ──────────────────────────────────────────────── */
+// Visible button on welcome screen
+$("#admin-link").addEventListener("click", promptPin);
+
+// Title gestures (backup): 3 quick taps (3s window) OR 1s long-press
+let titleTapCount = 0, titleTapTimer = null, titleLongTimer = null;
+const hdrTitle = $("#hdr-title");
+hdrTitle.style.cursor = "pointer";
+hdrTitle.addEventListener("touchstart", e=>{
+  titleLongTimer = setTimeout(promptPin, 1000);
+}, {passive:true});
+hdrTitle.addEventListener("touchend", ()=>{ clearTimeout(titleLongTimer); }, {passive:true});
+hdrTitle.addEventListener("touchcancel", ()=>{ clearTimeout(titleLongTimer); }, {passive:true});
+hdrTitle.addEventListener("mousedown", ()=>{
+  titleLongTimer = setTimeout(promptPin, 1000);
+});
+hdrTitle.addEventListener("mouseup", ()=>{ clearTimeout(titleLongTimer); });
+hdrTitle.addEventListener("mouseleave", ()=>{ clearTimeout(titleLongTimer); });
+hdrTitle.addEventListener("click", ()=>{
+  titleTapCount++;
+  clearTimeout(titleTapTimer);
+  titleTapTimer = setTimeout(()=>{ titleTapCount=0; }, 3000);
+  if(titleTapCount >= 3){ titleTapCount = 0; promptPin(); }
+});
+// Desktop fallback: ctrl+shift+A
+addEventListener("keydown", e=>{
+  if(e.ctrlKey && e.shiftKey && (e.key==="A"||e.key==="a")){ e.preventDefault(); promptPin(); }
+});
+
+function promptPin(){
+  let entered = "";
+  openSheet(`
+    <h3>Admin access</h3>
+    <p style="color:var(--muted);font-size:.85rem">Enter the 4-digit PIN.</p>
+    <div class="pin-display" id="pin-display">····</div>
+    <div class="pin-pad" id="pin-pad">
+      ${[1,2,3,4,5,6,7,8,9].map(n=>`<button class="pin-key" data-k="${n}">${n}</button>`).join("")}
+      <button class="pin-key clear" data-k="C">Clear</button>
+      <button class="pin-key" data-k="0">0</button>
+      <button class="pin-key clear" data-k="X">⌫</button>
+    </div>
+    <div class="pin-error" id="pin-err"></div>
+    <div class="sheet-actions">
+      <button class="cancel" onclick="closeSheet()">Cancel</button>
+    </div>
+  `, {onMount:()=>{
+    $$("#pin-pad .pin-key").forEach(k=>{
+      k.onclick = ()=>{
+        const v = k.dataset.k;
+        if(v==="C") entered = "";
+        else if(v==="X") entered = entered.slice(0,-1);
+        else if(entered.length < 4) entered += v;
+        $("#pin-display").textContent = entered.padEnd(4,"·");
+        if(entered.length === 4){
+          if(entered === ADMIN_PIN){ closeSheet(); openAdmin(); }
+          else { $("#pin-err").textContent = "Wrong PIN"; entered = ""; setTimeout(()=>{$("#pin-display").textContent="····"; $("#pin-err").textContent="";},900); }
+        }
+      };
+    });
+  }});
+}
+function openAdmin(){
+  showScreen("admin");
+  renderAdmin();
+}
+$$(".admin-tab").forEach(t=>{
+  t.addEventListener("click", ()=>{
+    $$(".admin-tab").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    adminTab = t.dataset.tab;
+    renderAdmin();
+  });
+});
+function renderAdmin(){
+  const c = $("#admin-content"); c.innerHTML = "";
+  if(adminTab === "chunks") renderChunksAdmin(c);
+  else renderItemsAdmin(c);
+}
+function renderChunksAdmin(c){
+  const addBtn = document.createElement("button");
+  addBtn.className = "btn-mini gold"; addBtn.style.width = "100%"; addBtn.style.marginBottom = "12px";
+  addBtn.textContent = "+ Add chunk";
+  addBtn.onclick = ()=>editChunk(null);
+  c.appendChild(addBtn);
+  DATA.chunks.forEach((ch, i)=>{
+    const row = document.createElement("div"); row.className = "chunk-row";
+    const itemCount = DATA.items.filter(it=>it.chunkId===ch.id).length;
+    row.innerHTML = `
+      <div class="chunk-swatch" style="background:${ch.color}"></div>
+      <div class="chunk-row-info">
+        <div class="chunk-row-name">${escapeHtml(ch.name)}</div>
+        <div class="chunk-row-meta">${itemCount} item${itemCount===1?"":"s"} · ${escapeHtml(ch.divider||"")}</div>
+      </div>
+      <div class="chunk-row-actions">
+        <button class="icon-btn" data-act="up" ${i===0?"disabled":""}>↑</button>
+        <button class="icon-btn" data-act="down" ${i===DATA.chunks.length-1?"disabled":""}>↓</button>
+        <button class="icon-btn" data-act="edit">✎</button>
+        <button class="icon-btn" data-act="del">🗑</button>
+      </div>
+    `;
+    row.querySelector("[data-act=up]").onclick = ()=>{ swap(DATA.chunks, i, i-1); renderAdmin(); };
+    row.querySelector("[data-act=down]").onclick = ()=>{ swap(DATA.chunks, i, i+1); renderAdmin(); };
+    row.querySelector("[data-act=edit]").onclick = ()=>editChunk(ch);
+    row.querySelector("[data-act=del]").onclick = ()=>confirmDeleteChunk(ch);
+    c.appendChild(row);
+  });
+}
+function swap(arr,i,j){ if(j<0||j>=arr.length) return; [arr[i],arr[j]] = [arr[j],arr[i]]; }
+function editChunk(ch){
+  if(!ch){ return newChunkModal(); }
+  return openChunkEditor(ch);
+}
+function newChunkModal(){
+  const data = { id:uid("c"), name:"", color: PALETTE[DATA.chunks.length % PALETTE.length], divider:"" };
+  openSheet(`
+    <h3>New chunk</h3>
+    <div class="edit-form" style="border:none;padding:0">
+      <label class="field-label">Chunk name</label>
+      <input type="text" class="text-input" id="ec-name" value="" placeholder="e.g. Drill">
+      <label class="field-label">Divider message (shown after this chunk's last item)</label>
+      <input type="text" class="text-input" id="ec-div" value="" placeholder="e.g. Drill ready">
+      <label class="field-label">Color</label>
+      <div class="swatch-grid" id="ec-swatches">
+        ${PALETTE.map(p=>`<div class="swatch${p===data.color?" selected":""}" style="background:${p}" data-c="${p}"></div>`).join("")}
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="cancel" onclick="closeSheet()">Cancel</button>
+      <button class="confirm" id="ec-save">Save</button>
+    </div>
+  `, {onMount:()=>{
+    let chosen = data.color;
+    $$("#ec-swatches .swatch").forEach(s=>{
+      s.onclick = ()=>{
+        chosen = s.dataset.c;
+        $$("#ec-swatches .swatch").forEach(x=>x.classList.remove("selected"));
+        s.classList.add("selected");
+      };
+    });
+    $("#ec-save").onclick = ()=>{
+      const name = $("#ec-name").value.trim();
+      if(!name){ toast("Name required"); return; }
+      const divider = $("#ec-div").value.trim() || (name + " ready");
+      DATA.chunks.push({ id:data.id, name, color:chosen, divider });
+      closeSheet(); renderAdmin();
+    };
+  }});
+}
+function openChunkEditor(ch){
+  const original = ch;
+  const draft = {
+    chunk: { id: ch.id, name: ch.name, color: ch.color, divider: ch.divider },
+    items: DATA.items.filter(i=>i.chunkId===ch.id).map(i=>({
+      id: i.id, chunkId: i.chunkId, name: i.name, location: i.location,
+      photos: [...(i.photos||[])], locationPhotos: [...(i.locationPhotos||[])]
+    }))
+  };
+
+  const renderItemCardHTML = (item)=>{
+    const idp = `cei-${item.id}`;
+    const photoTiles = (arr, key)=>arr.map((p,i)=>`<div class="photo-tile"><img src="${p}"><button class="remove" data-key="${key}" data-iid="${item.id}" data-i="${i}">×</button></div>`).join("");
+    const emptyHint = `<div class="dropzone-empty">⬇ Drop · 📋 paste · 📷 take · 🖥 upload</div>`;
+    return `
+    <div class="chunk-editor-item" data-item-id="${item.id}">
+      <div class="item-head">
+        <input type="text" class="item-name-input" id="${idp}-name" value="${escapeAttr(item.name)}" placeholder="Item name">
+        <button class="icon-btn" data-act="del-item" data-iid="${item.id}" title="Delete item">🗑</button>
+      </div>
+      <input type="text" class="item-loc-input" id="${idp}-loc" value="${escapeAttr(item.location)}" placeholder="Location (e.g. Crani bin, top drawer)">
+
+      <div class="photo-block">
+        <div class="photo-block-label">📦 Item photos (${item.photos.length})</div>
+        <div class="photo-manager" id="${idp}-i-photos">
+          ${photoTiles(item.photos, "photos")}
+          ${item.photos.length === 0 ? emptyHint : ""}
+        </div>
+        <div class="photo-source-row">
+          <button class="photo-source-btn" data-act="cam" data-iid="${item.id}" data-key="photos">📷 Photo</button>
+          <button class="photo-source-btn" data-act="upload" data-iid="${item.id}" data-key="photos">🖥 Upload</button>
+          <button class="photo-source-btn" data-act="paste" data-iid="${item.id}" data-key="photos">📋 Paste</button>
+        </div>
+      </div>
+
+      <div class="photo-block">
+        <div class="photo-block-label">📍 Location photos (${item.locationPhotos.length})</div>
+        <div class="photo-manager" id="${idp}-l-photos">
+          ${photoTiles(item.locationPhotos, "locationPhotos")}
+          ${item.locationPhotos.length === 0 ? emptyHint : ""}
+        </div>
+        <div class="photo-source-row">
+          <button class="photo-source-btn" data-act="cam" data-iid="${item.id}" data-key="locationPhotos">📷 Photo</button>
+          <button class="photo-source-btn" data-act="upload" data-iid="${item.id}" data-key="locationPhotos">🖥 Upload</button>
+          <button class="photo-source-btn" data-act="paste" data-iid="${item.id}" data-key="locationPhotos">📋 Paste</button>
+        </div>
+      </div>
+    </div>`;
+  };
+
+  const renderBody = ()=>{
+    const itemsHtml = draft.items.length
+      ? draft.items.map(renderItemCardHTML).join("")
+      : `<div class="cei-empty">No items yet — tap "+ Add item" below.</div>`;
+    return `
+      <h3 style="color:${escapeAttr(draft.chunk.color)}">${escapeHtml(draft.chunk.name)}</h3>
+      <div class="edit-form" style="border:none;padding:0">
+        <label class="field-label">Chunk name</label>
+        <input type="text" class="text-input" id="ec-name" value="${escapeAttr(draft.chunk.name)}">
+        <label class="field-label">Divider message (shown after this chunk's last item)</label>
+        <input type="text" class="text-input" id="ec-div" value="${escapeAttr(draft.chunk.divider)}">
+        <label class="field-label">Color</label>
+        <div class="swatch-grid" id="ec-swatches">
+          ${PALETTE.map(p=>`<div class="swatch${p===draft.chunk.color?" selected":""}" style="background:${p}" data-c="${p}"></div>`).join("")}
+        </div>
+      </div>
+      <div class="chunk-items-section">
+        <div class="chunk-items-header">Items in this chunk (${draft.items.length})</div>
+        <div id="cei-items-list">${itemsHtml}</div>
+        <button class="chunk-editor-add" id="cei-add-item">+ Add item to this chunk</button>
+      </div>
+      <div class="sheet-actions">
+        <button class="cancel" onclick="closeSheet()">Cancel</button>
+        <button class="confirm" id="ec-save">Save changes</button>
+      </div>
+    `;
+  };
+
+  const redraw = ()=>{
+    $("#sheet").innerHTML = renderBody();
+    wireBody();
+  };
+
+  const wireBody = ()=>{
+    // Chunk fields
+    $$("#ec-swatches .swatch").forEach(s=>{
+      s.onclick = ()=>{
+        draft.chunk.color = s.dataset.c;
+        $$("#ec-swatches .swatch").forEach(x=>x.classList.remove("selected"));
+        s.classList.add("selected");
+      };
+    });
+    $("#ec-name").oninput = e=>{ draft.chunk.name = e.target.value; };
+    $("#ec-div").oninput  = e=>{ draft.chunk.divider = e.target.value; };
+
+    // Item name + location inputs
+    draft.items.forEach(item=>{
+      const ne = $(`#cei-${item.id}-name`);
+      const le = $(`#cei-${item.id}-loc`);
+      if(ne) ne.oninput = e=>{ item.name = e.target.value; };
+      if(le) le.oninput = e=>{ item.location = e.target.value; };
+    });
+
+    // Photo remove buttons
+    $$(".chunk-editor-item .remove").forEach(b=>{
+      b.onclick = e=>{
+        e.stopPropagation();
+        const iid = b.dataset.iid, key = b.dataset.key, idx = +b.dataset.i;
+        const item = draft.items.find(it=>it.id===iid);
+        if(item){ item[key].splice(idx,1); redraw(); }
+      };
+    });
+
+    // Delete-item buttons
+    $$('.chunk-editor-item [data-act="del-item"]').forEach(b=>{
+      b.onclick = ()=>{
+        const iid = b.dataset.iid;
+        draft.items = draft.items.filter(it=>it.id !== iid);
+        redraw();
+      };
+    });
+
+    // Photo source buttons (camera / upload / paste)
+    $$(".chunk-editor-item .photo-source-btn").forEach(b=>{
+      const act = b.dataset.act, iid = b.dataset.iid, key = b.dataset.key;
+      const item = draft.items.find(it=>it.id===iid);
+      if(!item) return;
+      const handleFiles = async (files)=>{
+        if(!files || files.length===0) return;
+        toast("Compressing photo…");
+        for(const f of files){
+          try{ item[key].push(await compressImage(f, 1500, 0.8)); }
+          catch(e){ toast("Could not load photo"); }
+        }
+        redraw();
+      };
+      if(act === "cam"){
+        b.onclick = ()=>{
+          activePhotoHandler = handleFiles;
+          const inp = document.createElement("input");
+          inp.type = "file"; inp.accept = "image/*"; inp.capture = "environment";
+          inp.onchange = e=>handleFiles(e.target.files);
+          inp.click();
+        };
+      } else if(act === "upload"){
+        b.onclick = ()=>{
+          activePhotoHandler = handleFiles;
+          const inp = document.createElement("input");
+          inp.type = "file"; inp.accept = "image/*"; inp.multiple = true;
+          inp.onchange = e=>handleFiles(e.target.files);
+          inp.click();
+        };
+      } else if(act === "paste"){
+        b.onclick = ()=>{ activePhotoHandler = handleFiles; pasteFromClipboard(handleFiles); };
+      }
+    });
+
+    // Photo manager drop zones (drag-and-drop + click activation for paste)
+    draft.items.forEach(item=>{
+      [["photos","i"], ["locationPhotos","l"]].forEach(([key, suffix])=>{
+        const zone = $(`#cei-${item.id}-${suffix}-photos`);
+        if(!zone) return;
+        const handleFiles = async (files)=>{
+          if(!files || files.length===0) return;
+          toast("Compressing photo…");
+          for(const f of files){
+            try{ item[key].push(await compressImage(f, 1500, 0.8)); }
+            catch(e){ toast("Could not load photo"); }
+          }
+          redraw();
+        };
+        zone.addEventListener("click", ()=>{ activePhotoHandler = handleFiles; });
+        let dragCounter = 0;
+        zone.addEventListener("dragenter", e=>{ e.preventDefault(); dragCounter++; zone.classList.add("drag-over"); });
+        zone.addEventListener("dragover", e=>{ e.preventDefault(); e.dataTransfer.dropEffect = "copy"; });
+        zone.addEventListener("dragleave", ()=>{ dragCounter--; if(dragCounter<=0) zone.classList.remove("drag-over"); });
+        zone.addEventListener("drop", e=>{
+          e.preventDefault(); dragCounter = 0; zone.classList.remove("drag-over");
+          const files = Array.from(e.dataTransfer.files||[]).filter(f=>f.type.startsWith("image/"));
+          if(files.length===0){ toast("Drop image files only"); return; }
+          activePhotoHandler = handleFiles;
+          handleFiles(files);
+        });
+      });
+    });
+
+    // Add item
+    $("#cei-add-item").onclick = ()=>{
+      const ni = { id:uid("i"), chunkId:draft.chunk.id, name:"", location:"", photos:[], locationPhotos:[] };
+      draft.items.push(ni);
+      redraw();
+      setTimeout(()=>$(`#cei-${ni.id}-name`)?.focus(), 50);
+    };
+
+    // Save
+    $("#ec-save").onclick = ()=>{
+      const name = draft.chunk.name.trim();
+      if(!name){ toast("Chunk name required"); return; }
+      original.name = name;
+      original.color = draft.chunk.color;
+      original.divider = (draft.chunk.divider.trim() || (name + " ready"));
+      const validItems = draft.items.filter(it=>it.name.trim());
+      const dropped = draft.items.length - validItems.length;
+      if(dropped > 0) toast(`${dropped} unnamed item(s) discarded`);
+      DATA.items = DATA.items.filter(i=>i.chunkId !== original.id).concat(validItems);
+      closeSheet(); renderAdmin();
+    };
+  };
+
+  openSheet(renderBody(), { onMount: wireBody });
+}
+function confirmDeleteChunk(ch){
+  const itemCount = DATA.items.filter(i=>i.chunkId===ch.id).length;
+  openSheet(`
+    <h3>Delete "${escapeHtml(ch.name)}"?</h3>
+    <p style="color:var(--muted);font-size:.9rem">${itemCount} item${itemCount===1?"":"s"} in this chunk will be deleted too.</p>
+    <div class="sheet-actions">
+      <button class="cancel" onclick="closeSheet()">Cancel</button>
+      <button class="danger" id="del-yes">Delete</button>
+    </div>
+  `,{onMount:()=>{
+    $("#del-yes").onclick = ()=>{
+      DATA.chunks = DATA.chunks.filter(c=>c.id!==ch.id);
+      DATA.items = DATA.items.filter(i=>i.chunkId!==ch.id);
+      closeSheet(); renderAdmin();
+    };
+  }});
+}
+
+function renderItemsAdmin(c){
+  const addBtn = document.createElement("button");
+  addBtn.className = "btn-mini gold"; addBtn.style.width = "100%"; addBtn.style.marginBottom = "12px";
+  addBtn.textContent = "+ Add item";
+  addBtn.onclick = ()=>editItem(null);
+  c.appendChild(addBtn);
+  DATA.chunks.forEach(ch=>{
+    const its = DATA.items.filter(i=>i.chunkId===ch.id);
+    const grp = document.createElement("div"); grp.className = "item-group";
+    grp.innerHTML = `<div class="item-group-header" style="background:${ch.color}" title="Tap to edit this chunk">${escapeHtml(ch.name)} <span style="opacity:.8;font-weight:400">· ${its.length}</span><span class="ig-edit-ico">✎ edit</span></div>`;
+    grp.querySelector(".item-group-header").onclick = ()=>editChunk(ch);
+    if(its.length === 0){
+      const empty = document.createElement("div");
+      empty.style.cssText = "padding:14px;color:var(--muted);font-size:.82rem;text-align:center";
+      empty.textContent = "No items yet";
+      grp.appendChild(empty);
+    } else {
+      its.forEach((it,i)=>{
+        const row = document.createElement("div"); row.className = "item-row";
+        const thumb = it.photos && it.photos[0] ? `<img src="${it.photos[0]}">` : `${it.photos?.length||0}📷`;
+        row.innerHTML = `
+          <div class="item-row-thumb">${thumb}</div>
+          <div class="item-row-info">
+            <div class="item-row-name">${escapeHtml(it.name)}</div>
+            <div class="item-row-loc">${escapeHtml(it.location||"No location")}</div>
+          </div>
+          <button class="icon-btn" data-act="up" ${i===0?"disabled":""}>↑</button>
+          <button class="icon-btn" data-act="down" ${i===its.length-1?"disabled":""}>↓</button>
+          <button class="icon-btn" data-act="edit">✎</button>
+          <button class="icon-btn" data-act="del">🗑</button>
+        `;
+        row.querySelector("[data-act=up]").onclick = ()=>{
+          const idx = DATA.items.findIndex(x=>x.id===it.id);
+          const prevIdx = DATA.items.findIndex(x=>x.id===its[i-1].id);
+          swap(DATA.items, idx, prevIdx); renderAdmin();
+        };
+        row.querySelector("[data-act=down]").onclick = ()=>{
+          const idx = DATA.items.findIndex(x=>x.id===it.id);
+          const nextIdx = DATA.items.findIndex(x=>x.id===its[i+1].id);
+          swap(DATA.items, idx, nextIdx); renderAdmin();
+        };
+        row.querySelector("[data-act=edit]").onclick = ()=>editItem(it);
+        row.querySelector("[data-act=del]").onclick = ()=>confirmDeleteItem(it);
+        grp.appendChild(row);
+      });
+    }
+    c.appendChild(grp);
+  });
+}
+function editItem(it){
+  const isNew = !it;
+  const data = it || { id:uid("i"), chunkId:DATA.chunks[0]?.id||"", name:"", location:"", photos:[], locationPhotos:[] };
+  // Migrate legacy items that lack locationPhotos
+  if(!data.locationPhotos) data.locationPhotos = [];
+  // Work on a clone so cancel discards
+  const draft = JSON.parse(JSON.stringify(data));
+  if(!draft.locationPhotos) draft.locationPhotos = [];
+  const photoSection = (label, hint, key, idPrefix)=>`
+    <label class="field-label">${label} (${draft[key].length})</label>
+    <div class="photo-manager" id="${idPrefix}-photos">
+      ${draft[key].map((p,i)=>`<div class="photo-tile"><img src="${p}"><button class="remove" data-i="${i}">×</button></div>`).join("")}
+      ${draft[key].length === 0 ? `<div class="dropzone-empty">⬇ Drag &amp; drop photos here<span class="small">or use the buttons below</span></div>` : ""}
+    </div>
+    <div class="photo-source-row">
+      <button class="photo-source-btn" id="${idPrefix}-camera">📷 Take photo</button>
+      <button class="photo-source-btn" id="${idPrefix}-computer">🖥 Upload</button>
+      <button class="photo-source-btn" id="${idPrefix}-paste">📋 Paste</button>
+    </div>
+    <input type="file" id="${idPrefix}-camera-input" accept="image/*" capture="environment" style="display:none">
+    <input type="file" id="${idPrefix}-computer-input" accept="image/*" multiple style="display:none">
+    <div class="field-hint" style="margin-top:6px">${hint} · Tip: snip your screen, then tap Paste (or press Ctrl+V).</div>
+  `;
+  const renderForm = ()=>`
+    <h3>${isNew?"New item":"Edit item"}</h3>
+    <div class="edit-form" style="border:none;padding:0">
+      <label class="field-label">Chunk</label>
+      <select class="select-input" id="ei-chunk">
+        ${DATA.chunks.map(c=>`<option value="${c.id}" ${c.id===draft.chunkId?"selected":""}>${escapeHtml(c.name)}</option>`).join("")}
+      </select>
+      <label class="field-label">Item name</label>
+      <input type="text" class="text-input" id="ei-name" value="${escapeAttr(draft.name)}" placeholder="e.g. Midas drill foot pedal">
+      <label class="field-label">Location text</label>
+      <input type="text" class="text-input" id="ei-loc" value="${escapeAttr(draft.location)}" placeholder="e.g. Crani bin, second drawer">
+      <div style="margin-top:18px;padding:12px;background:var(--bg);border-radius:10px">
+        <div style="font:600 .82rem 'DM Sans',sans-serif;color:var(--navy);margin-bottom:4px">Card front — the item</div>
+        ${photoSection("Item photos", "Photos of the item itself · auto-resize to 1500px", "photos", "ei")}
+      </div>
+      <div style="margin-top:12px;padding:12px;background:var(--bg);border-radius:10px">
+        <div style="font:600 .82rem 'DM Sans',sans-serif;color:var(--navy);margin-bottom:4px">Card back — where it lives</div>
+        ${photoSection("Location photos", "Photos of where the item is stored · 2–3 ideal · auto-resize to 1500px", "locationPhotos", "el")}
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="cancel" onclick="closeSheet()">Cancel</button>
+      <button class="confirm" id="ei-save">Save</button>
+    </div>
+  `;
+  const wirePhotoSection = (key, idPrefix, re)=>{
+    $$(`#${idPrefix}-photos .remove`).forEach(b=>{
+      b.onclick = ()=>{ const i = +b.dataset.i; draft[key].splice(i,1); re(); };
+    });
+    const handleFiles = async (files)=>{
+      if(!files || files.length===0) return;
+      toast("Compressing photo…");
+      for(const f of files){
+        try{
+          const dataUrl = await compressImage(f, 1500, 0.8);
+          draft[key].push(dataUrl);
+        }catch(e){ toast("Could not load photo"); }
+      }
+      re();
+    };
+    $(`#${idPrefix}-camera`).onclick = ()=>{ activePhotoHandler = handleFiles; $(`#${idPrefix}-camera-input`).click(); };
+    $(`#${idPrefix}-computer`).onclick = ()=>{ activePhotoHandler = handleFiles; $(`#${idPrefix}-computer-input`).click(); };
+    $(`#${idPrefix}-paste`).onclick = ()=>{ activePhotoHandler = handleFiles; pasteFromClipboard(handleFiles); };
+    $(`#${idPrefix}-camera-input`).onchange = e=>handleFiles(e.target.files);
+    $(`#${idPrefix}-computer-input`).onchange = e=>handleFiles(e.target.files);
+    // Drag-and-drop on the photo manager (desktop)
+    const zone = $(`#${idPrefix}-photos`);
+    zone.addEventListener("click", ()=>{ activePhotoHandler = handleFiles; });
+    let dragCounter = 0;
+    zone.addEventListener("dragenter", e=>{ e.preventDefault(); dragCounter++; zone.classList.add("drag-over"); });
+    zone.addEventListener("dragover", e=>{ e.preventDefault(); e.dataTransfer.dropEffect = "copy"; });
+    zone.addEventListener("dragleave", ()=>{ dragCounter--; if(dragCounter <= 0) zone.classList.remove("drag-over"); });
+    zone.addEventListener("drop", e=>{
+      e.preventDefault(); dragCounter = 0; zone.classList.remove("drag-over");
+      const files = Array.from(e.dataTransfer.files || []).filter(f=>f.type.startsWith("image/"));
+      if(files.length === 0){ toast("Drop image files only"); return; }
+      activePhotoHandler = handleFiles;
+      handleFiles(files);
+    });
+  };
+  const mount = ()=>{
+    const re = ()=>{ $("#sheet").innerHTML = renderForm(); mount(); };
+    $("#ei-chunk").onchange = e=>{ draft.chunkId = e.target.value; };
+    $("#ei-name").oninput = e=>{ draft.name = e.target.value; };
+    $("#ei-loc").oninput = e=>{ draft.location = e.target.value; };
+    wirePhotoSection("photos", "ei", re);
+    wirePhotoSection("locationPhotos", "el", re);
+    $("#ei-save").onclick = ()=>{
+      if(!draft.name.trim()){ toast("Name required"); return; }
+      if(!draft.chunkId){ toast("Pick a chunk"); return; }
+      if(isNew) DATA.items.push(draft);
+      else Object.assign(it, draft);
+      closeSheet(); renderAdmin();
+    };
+  };
+  openSheet(renderForm(), {onMount: mount});
+}
+function confirmDeleteItem(it){
+  openSheet(`
+    <h3>Delete "${escapeHtml(it.name)}"?</h3>
+    <div class="sheet-actions">
+      <button class="cancel" onclick="closeSheet()">Cancel</button>
+      <button class="danger" id="di-yes">Delete</button>
+    </div>
+  `,{onMount:()=>{
+    $("#di-yes").onclick = ()=>{
+      DATA.items = DATA.items.filter(x=>x.id!==it.id);
+      closeSheet(); renderAdmin();
+    };
+  }});
+}
+
+/* ────────────────────────────────────────────────
+   IMAGE COMPRESSION
+   ──────────────────────────────────────────────── */
+function compressImage(file, maxW=1500, quality=0.8){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = ()=>{
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = ()=>{
+        const ratio = img.width > maxW ? maxW/img.width : 1;
+        const w = Math.round(img.width * ratio);
+        const h = Math.round(img.height * ratio);
+        const c = document.createElement("canvas"); c.width = w; c.height = h;
+        const ctx = c.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(c.toDataURL("image/jpeg", quality));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ────────────────────────────────────────────────
+   PREVIEW + EXPORT
+   ──────────────────────────────────────────────── */
+$("#preview-btn").addEventListener("click", ()=>{
+  resetSession();
+  session.role = "Preview"; session.name = "";
+  startDeck();
+});
+$("#export-btn").addEventListener("click", exportApp);
+function exportApp(){
+  const html = document.documentElement.outerHTML;
+  const newDataLine = "const DEFAULT_DATA = " + JSON.stringify(DATA, null, 2) + ";";
+  const re = /const DEFAULT_DATA = \{[\s\S]*?\n\};/;
+  const out = html.replace(re, newDataLine);
+  const stamp = new Date().toISOString().slice(0,10);
+  const blob = new Blob(["<!DOCTYPE html>\n", out], {type:"text/html"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `Crani_Cards_Summer26_${stamp}.html`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  toast("Exported! Share the downloaded file via QR code.");
+}
+
+/* ────────────────────────────────────────────────
+   ESCAPE HELPERS
+   ──────────────────────────────────────────────── */
+function escapeHtml(s){
+  return String(s||"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+}
+function escapeAttr(s){ return escapeHtml(s).replace(/`/g,"&#96;"); }
+
+/* ────────────────────────────────────────────────
+   OFFLINE QUEUE RETRY ON RECONNECT
+   ──────────────────────────────────────────────── */
+addEventListener("online", flushQueue);
+async function flushQueue(){
+  if(!APPS_SCRIPT_URL) return;
+  let q = [];
+  try{ q = JSON.parse(localStorage.getItem("crani_queue")||"[]"); }catch{}
+  if(!q.length) return;
+  const remaining = [];
+  for(const p of q){
+    try{
+      const res = await fetch(APPS_SCRIPT_URL,{method:"POST",mode:"cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(p)});
+      const data = await res.json();
+      if(!data || !data.token) remaining.push(p);
+    }catch{ remaining.push(p); }
+  }
+  localStorage.setItem("crani_queue", JSON.stringify(remaining));
+  if(remaining.length === 0) toast("Offline submissions synced ✓");
+}
+window.addEventListener("load", flushQueue);
+
+</script>
+</body>
+</html>
