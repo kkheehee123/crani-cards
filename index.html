@@ -316,18 +316,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <!-- ── DECK ── -->
   <section id="deck-screen" class="screen">
     <div class="deck-topbar">
-      <span class="progress-text" id="progress-text">Chunk complete</span>
+      <span class="progress-text" id="progress-text">Card 1 / 1</span>
       <button class="quit-link" id="quit-btn">Quit</button>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 100%;"></div></div>
-    <div id="card-stage" class="card-stage"><div class="divider-card exit-left">
-    <div class="divider-inner" style="--chunk-color:#2a7f5f">
-      <div class="divider-check">✓</div>
-      <div class="divider-msg">Bone flap &amp; meds ready</div>
-      <div class="divider-next">All done!</div>
-      <button class="divider-skip" id="divider-skip">Continue ›</button>
-    </div>
-  </div></div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div id="card-stage" class="card-stage"></div>
   </section>
 
   <!-- ── COMPLETE ── -->
@@ -335,25 +328,25 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="screen-inner">
       <div class="complete-hero">
         <h2>🎉 Case built.</h2>
-        <p class="sub" id="complete-sub">You finished all 7 cards.</p>
+        <p class="sub" id="complete-sub">You finished all cards.</p>
       </div>
       <div class="stats-row">
-        <div class="stat-card"><div class="stat-num" id="stat-knew">6</div><div class="stat-label">ALREADY KNEW</div></div>
-        <div class="stat-card"><div class="stat-num" id="stat-now">1</div><div class="stat-label">NOW I KNOW</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-knew">0</div><div class="stat-label">ALREADY KNEW</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-now">0</div><div class="stat-label">NOW I KNOW</div></div>
       </div>
-      <div class="revisit-block" id="revisit-block" style="">
+      <div class="revisit-block" id="revisit-block" style="display:none">
         <div class="revisit-title">Items to revisit</div>
-        <div class="revisit-list" id="revisit-list">• Bone Flap kit</div>
+        <div class="revisit-list" id="revisit-list"></div>
       </div>
-      <div id="submit-area" style="">
-        <button class="cta" id="submit-btn" disabled="">Submitting…</button>
+      <div id="submit-area">
+        <button class="cta" id="submit-btn">Submit for prize</button>
         <div class="field-hint" style="text-align:center;margin-top:8px">Submission is required to claim your prize token.</div>
         <div class="submit-status" id="submit-status" style="display:none"></div>
       </div>
-      <div id="token-area" style="display: none;">
+      <div id="token-area" style="display:none">
         <div class="token-block">
           <div class="token-label">YOUR PRIZE TOKEN</div>
-          <div class="token-code" id="token-code">HMQDDP</div>
+          <div class="token-code" id="token-code">------</div>
           <div class="token-hint">Screenshot this or write it down to claim your prize.</div>
         </div>
         <button class="cta teal" id="done-btn" style="margin-top:14px">Done</button>
@@ -512,7 +505,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 </main>
 
-<canvas id="confetti-canvas" width="1528" height="732"></canvas>
+<canvas id="confetti-canvas" width="1272" height="588"></canvas>
 
 <div class="sheet-backdrop" id="sheet-backdrop">
   <div class="sheet" id="sheet"></div>
@@ -1247,8 +1240,13 @@ async function submitResults(){
   }
   const chunksWithUnknowns = Object.entries(chunkUnknownMap).sort((a,b)=>b[1]-a[1]).map(([n,c])=>`${n} (${c})`).join("; ");
 
+  // Generate the prize token client-side so the user sees it INSTANTLY.
+  // We send the same token to the Sheet so it matches what's recorded there.
+  const token = makeLocalToken();
+
   const payload = {
     timestamp: new Date().toISOString(),
+    token: token,
     role: session.role,
     total_cards: totalC,
     already_knew_count: knew,
@@ -1259,34 +1257,39 @@ async function submitResults(){
   };
 
   if(!APPS_SCRIPT_URL){
-    // No URL configured — local-only token for testing
-    const token = makeLocalToken();
     session.token = token; session.submitted = true; session.submitting = false;
     revealToken(token);
     status.className = "submit-status queued"; status.style.display = "block";
     status.textContent = "⚠ No Google Sheet URL set yet — token shown for demo only.";
     return;
   }
+
+  // Fire-and-forget POST. Google Apps Script redirects through googleusercontent.com
+  // and the redirect response often blocks reading the body in CORS mode, which is
+  // why the old code froze on "Submitting…". With no-cors we don't read the response,
+  // but the request still reaches the Sheet, and the token we generated matches what
+  // the Apps Script writes (it uses payload.token).
   try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method:"POST",
-      mode:"cors",
-      headers:{"Content-Type":"text/plain;charset=utf-8"}, // text/plain avoids CORS preflight for Apps Script
+    fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload),
+      keepalive: true,
+    }).catch(err=>{
+      // Network truly failed — queue for retry on reconnect
+      console.warn("submit failed, queued", err);
+      queueSubmission(payload);
     });
-    const data = await res.json();
-    if(data && data.token){
-      session.token = data.token; session.submitted = true; session.submitting = false;
-      revealToken(data.token);
-    } else { throw new Error("No token in response"); }
   } catch(err){
-    // Queue locally — token will appear on retry
     queueSubmission(payload);
-    btn.disabled = false; btn.textContent = "Retry submit";
-    status.className = "submit-status queued"; status.style.display = "block";
-    status.textContent = "📡 Saved offline. Token will appear once we reconnect — tap Retry submit.";
-    session.submitting = false;
   }
+
+  // Show token immediately so the user isn't staring at a frozen button
+  session.token = token; session.submitted = true; session.submitting = false;
+  revealToken(token);
+  status.className = "submit-status queued"; status.style.display = "block";
+  status.textContent = "✓ Submitted. If offline, it will sync when you reconnect.";
 }
 function makeLocalToken(){
   const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
@@ -2008,9 +2011,8 @@ async function flushQueue(){
   const remaining = [];
   for(const p of q){
     try{
-      const res = await fetch(APPS_SCRIPT_URL,{method:"POST",mode:"cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(p)});
-      const data = await res.json();
-      if(!data || !data.token) remaining.push(p);
+      await fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(p),keepalive:true});
+      // no-cors: can't read response — assume success unless fetch threw
     }catch{ remaining.push(p); }
   }
   localStorage.setItem("crani_queue", JSON.stringify(remaining));
