@@ -1195,6 +1195,9 @@ function resetSession(){
   $("#submit-area").style.display = "";
   $("#token-area").style.display = "none";
   $("#submit-status").style.display = "none";
+  // BUGFIX: restore submit button so a previous "Submitting…" state doesn't persist
+  const sb = $("#submit-btn");
+  if(sb){ sb.disabled = false; sb.textContent = "Submit for prize"; }
 }
 
 /* ────────────────────────────────────────────────
@@ -1224,6 +1227,7 @@ async function submitResults(){
   session.submitting = true;
   const btn = $("#submit-btn"); btn.disabled = true; btn.textContent = "Submitting…";
   const status = $("#submit-status");
+  try {
   const totalC = totalCards();
   const knew = session.responses.filter(r=>r.choice==="knew").length;
   const now = session.responses.filter(r=>r.choice==="now").length;
@@ -1295,6 +1299,18 @@ async function submitResults(){
       queueSubmission(payload);
     }
   }, 0);
+  } catch(err) {
+    // BUGFIX: any error in the submit pipeline used to leave the button stuck on "Submitting…"
+    // forever. Now we surface the error, reset state, and let the user retry.
+    console.error("submitResults failed:", err);
+    session.submitting = false;
+    session.submitted = false;
+    btn.disabled = false;
+    btn.textContent = "Submit for prize";
+    status.className = "submit-status error";
+    status.style.display = "block";
+    status.textContent = "Something went wrong. Tap Submit to try again.";
+  }
 }
 function makeLocalToken(){
   const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
