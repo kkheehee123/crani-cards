@@ -522,6 +522,135 @@ const APP_VERSION = "Crani Cards Summer '26";
 const ADMIN_PIN = "7217";
 
 /* ────────────────────────────────────────────────
+   DEBUG / ERROR CAPTURE
+   Catches every error (sync + async), shows it on
+   screen, stores it locally, and pushes it to the
+   Google Sheet so you can review later without
+   needing devtools.
+   ──────────────────────────────────────────────── */
+const ERROR_LOG_KEY = "crani_cards_error_log_v1";
+const MAX_LOCAL_ERRORS = 50;
+
+function getStoredErrors(){
+  try { return JSON.parse(localStorage.getItem(ERROR_LOG_KEY) || "[]"); }
+  catch { return []; }
+}
+function storeError(err){
+  try {
+    const log = getStoredErrors();
+    log.unshift(err);
+    if (log.length > MAX_LOCAL_ERRORS) log.length = MAX_LOCAL_ERRORS;
+    localStorage.setItem(ERROR_LOG_KEY, JSON.stringify(log));
+  } catch {}
+}
+function showErrorBanner(err){
+  let banner = document.getElementById("debug-overlay");
+  if (!banner) {
+    banner = document.createElement("div");
+    banner.id = "debug-overlay";
+    banner.setAttribute("role","alert");
+    banner.style.cssText = [
+      "position:fixed","left:0","right:0","bottom:0",
+      "background:#b91c1c","color:#fff","padding:12px 16px",
+      "font:13px/1.45 ui-monospace, Menlo, Consolas, monospace",
+      "z-index:99999","max-height:55vh","overflow:auto",
+      "box-shadow:0 -4px 12px rgba(0,0,0,.4)","cursor:pointer"
+    ].join(";");
+    banner.title = "Tap to dismiss";
+    banner.addEventListener("click", () => banner.remove());
+    document.body && document.body.appendChild(banner);
+  }
+  const t = new Date().toLocaleTimeString();
+  const where = err.lineno ? ` (line ${err.lineno})` : "";
+  const line = document.createElement("div");
+  line.style.cssText = "padding:6px 0;border-bottom:1px solid rgba(255,255,255,.25)";
+  line.textContent = `⚠ [${t}] ${err.message}${where}`;
+  banner.insertBefore(line, banner.firstChild);
+  if (!banner.querySelector("[data-hint]")) {
+    const h = document.createElement("div");
+    h.dataset.hint = "1";
+    h.style.cssText = "font-size:11px;opacity:.85;padding-top:8px";
+    h.textContent = "Tap banner to dismiss. Errors also logged to Google Sheet ‘Errors’ tab.";
+    banner.appendChild(h);
+  }
+}
+function sendErrorToSheet(err){
+  if (typeof APPS_SCRIPT_URL === "undefined" || !APPS_SCRIPT_URL) return;
+  try {
+    const payload = {
+      type: "error",
+      timestamp: new Date().toISOString(),
+      role: (typeof session !== "undefined" && session && session.role) || "unknown",
+      app_version: typeof APP_VERSION !== "undefined" ? APP_VERSION : "unknown",
+      user_agent: navigator.userAgent,
+      url: location.href,
+      message: err.message,
+      lineno: err.lineno || null,
+      colno: err.colno || null,
+      filename: err.filename || null,
+      stack: err.stack || null,
+    };
+    const opts = {
+      method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload),
+    };
+    try { if ("keepalive" in Request.prototype) opts.keepalive = true; } catch {}
+    fetch(APPS_SCRIPT_URL, opts).catch(()=>{});
+  } catch {}
+}
+function handleAppError(err){
+  const safe = {
+    message: err && err.message ? String(err.message) : String(err),
+    lineno: err && err.lineno,
+    colno: err && err.colno,
+    filename: err && err.filename,
+    stack: err && err.stack,
+    timestamp: new Date().toISOString(),
+  };
+  storeError(safe);
+  try { showErrorBanner(safe); } catch {}
+  sendErrorToSheet(safe);
+}
+window.addEventListener("error", (e) => {
+  handleAppError({
+    message: e.message,
+    lineno: e.lineno,
+    colno: e.colno,
+    filename: e.filename,
+    stack: e.error ? e.error.stack : null,
+  });
+});
+window.addEventListener("unhandledrejection", (e) => {
+  const r = e.reason;
+  handleAppError({
+    message: (r && r.message) ? r.message : String(r),
+    stack: (r && r.stack) ? r.stack : null,
+  });
+});
+// Optional: 5 fast taps on the title shows the stored error log
+(function attachLogViewer(){
+  let taps = 0, t = 0;
+  document.addEventListener("click", (e) => {
+    const titleEl = e.target.closest && e.target.closest(".hero h1");
+    if (!titleEl) return;
+    const now = Date.now();
+    if (now - t > 800) taps = 0;
+    t = now; taps++;
+    if (taps >= 5) {
+      taps = 0;
+      const log = getStoredErrors();
+      const msg = log.length === 0
+        ? "No errors logged."
+        : log.slice(0,10).map((x,i) => `${i+1}. [${new Date(x.timestamp).toLocaleTimeString()}] ${x.message}${x.lineno ? " :"+x.lineno : ""}`).join("\n");
+      alert(`Recent errors (${log.length} total):\n\n${msg}`);
+    }
+  });
+})();
+/* ───── end debug block ───── */
+
+
+/* ────────────────────────────────────────────────
    DATA — chunks + items (edit in admin → export)
    ──────────────────────────────────────────────── */
 const DEFAULT_DATA = {
