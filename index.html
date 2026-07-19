@@ -1025,7 +1025,7 @@ function saveLocal(){
   clearTimeout(_saveTimer);
   _saveTimer = setTimeout(()=>{
     try{
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ v: APP_VERSION, data: DATA }));
       const ind = document.getElementById("save-indicator");
       if(ind){
         ind.textContent = "✓ Saved";
@@ -1044,15 +1044,23 @@ function loadLocal(){
     const raw = localStorage.getItem(STORAGE_KEY);
     if(!raw) return false;
     const parsed = JSON.parse(raw);
-    if(parsed && Array.isArray(parsed.chunks) && Array.isArray(parsed.items)){
-      DATA = parsed;
+    // PERMANENT FIX: saved data is stamped with the APP_VERSION it was written under.
+    // If that stamp doesn't match the current build, the saved copy is stale (an older
+    // version's cards/photos) so we discard it and fall through to the fresh built-in
+    // DEFAULT_DATA. Bump APP_VERSION whenever you change the built-in cards and every
+    // device auto-refreshes on next load — no Reset needed. Old un-stamped saves (no
+    // parsed.v / parsed.data) are treated as stale too.
+    if(parsed && parsed.v === APP_VERSION && parsed.data
+       && Array.isArray(parsed.data.chunks) && Array.isArray(parsed.data.items)){
+      DATA = parsed.data;
       DATA.items.forEach(it=>{
         if(!it.locationPhotos) it.locationPhotos = [];
         if(!it.photos) it.photos = [];
       });
       return true;
     }
-  }catch(e){ console.warn("loadLocal failed", e); }
+    clearLocal();
+  }catch(e){ console.warn("loadLocal failed", e); clearLocal(); }
   return false;
 }
 function clearLocal(){ try{ localStorage.removeItem(STORAGE_KEY); }catch{} }
