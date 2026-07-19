@@ -59,6 +59,29 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .cta.teal{background:var(--teal);box-shadow:0 4px 14px rgba(95,144,137,.35)}
 .cta.teal:active{background:var(--teal-dark)}
 
+/* ── SURVEY (final level) ── */
+#survey-screen .screen-inner{max-width:480px}
+.survey-head{text-align:center;padding:18px 0 6px}
+.survey-head h2{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--navy)}
+.survey-head .sub{color:var(--muted);font-size:.88rem;margin-top:4px}
+.survey-dots{display:flex;justify-content:center;gap:8px;margin:14px 0 18px}
+.survey-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:all .2s}
+.survey-dot.done{background:var(--teal)}
+.survey-dot.current{background:var(--gold);transform:scale(1.3)}
+.survey-card{background:var(--card);border:1px solid var(--border);border-left:6px solid var(--qc,var(--gold));border-radius:var(--radius);padding:22px 20px 18px;box-shadow:0 4px 16px rgba(15,34,64,.08);animation:surveyIn .25s ease}
+@keyframes surveyIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.survey-kicker{font-size:.68rem;letter-spacing:.16em;font-weight:700;color:var(--qc,var(--gold-soft-text));text-transform:uppercase;margin-bottom:8px}
+.survey-q{font-size:1.02rem;line-height:1.5;color:var(--text);font-weight:600;margin-bottom:16px}
+.survey-opts{display:flex;flex-direction:column;gap:8px}
+.survey-opt{background:#fff;border:2px solid var(--border);border-radius:10px;padding:12px 14px;font:600 .9rem 'DM Sans',sans-serif;color:var(--text);cursor:pointer;text-align:left;transition:all .15s;min-height:48px;display:flex;align-items:center;gap:10px;width:100%}
+.survey-opt:active{transform:scale(.98)}
+.survey-opt.selected{background:var(--qc,var(--teal));border-color:var(--qc,var(--teal));color:#fff}
+.survey-opt .opt-num{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.72rem;flex-shrink:0;color:var(--muted)}
+.survey-opt.selected .opt-num{border-color:#fff;color:#fff}
+.survey-back{background:none;border:none;color:var(--muted);font:500 .82rem 'DM Sans',sans-serif;cursor:pointer;padding:12px;text-decoration:underline;display:block;margin:6px auto 0;min-height:44px}
+.survey-comment{width:100%;border:2px solid var(--border);border-radius:10px;padding:12px 14px;font:500 .92rem 'DM Sans',sans-serif;color:var(--text);min-height:110px;resize:vertical;margin-top:4px;box-sizing:border-box}
+.survey-comment:focus{outline:none;border-color:var(--teal)}
+
 .admin-link{display:block;width:100%;margin-top:20px;background:transparent;border:none;color:var(--muted);font:500 .82rem 'DM Sans',sans-serif;cursor:pointer;padding:14px;text-align:center;text-decoration:underline;min-height:44px}
 .admin-link:active{color:var(--navy)}
 
@@ -352,8 +375,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="revisit-list" id="revisit-list"></div>
       </div>
       <div id="submit-area" style="">
-        <button class="cta" id="submit-btn">Submit for prize</button>
-        <div class="field-hint" style="text-align:center;margin-top:8px">Submission is required to claim your prize token.</div>
+        <button class="cta" id="submit-btn">Continue — final level ›</button>
+        <div class="field-hint" style="text-align:center;margin-top:8px">5 quick taps, then your prize token.</div>
         <div class="submit-status queued" id="submit-status" style="display: none;">✓ Submitted. If offline, it will sync when you reconnect.</div>
       </div>
       <div id="token-area" style="display: none;">
@@ -364,6 +387,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         </div>
         <button class="cta teal" id="done-btn" style="margin-top:14px">Done</button>
       </div>
+    </div>
+  </section>
+
+  <!-- ── SURVEY ── -->
+  <section id="survey-screen" class="screen">
+    <div class="screen-inner">
+      <div class="survey-head">
+        <h2>Final level</h2>
+        <p class="sub">5 quick taps. Your prize token is on the other side.</p>
+      </div>
+      <div class="survey-dots" id="survey-dots"></div>
+      <div id="survey-stage"></div>
     </div>
   </section>
 
@@ -531,7 +566,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
    CONFIG — paste your Apps Script Web App URL here
    ──────────────────────────────────────────────── */
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiqTMiETmIZC9iQZixeLNVDI3rICneg7eayD5JpcmD1-463dJMeuL7IHUi94bYwqDX_g/exec"; // e.g. "https://script.google.com/macros/s/AKfy.../exec"
-const APP_VERSION = "Crani Cards Summer '26";
+const APP_VERSION = "Crani Cards Summer '26 v14";
 const ADMIN_PIN = "7217";
 
 /* ────────────────────────────────────────────────
@@ -1472,7 +1507,8 @@ function resetSession(){
   $("#submit-status").style.display = "none";
   // BUGFIX: restore submit button so a previous "Submitting…" state doesn't persist
   const sb = $("#submit-btn");
-  if(sb){ sb.disabled = false; sb.textContent = "Submit for prize"; }
+  if(sb){ sb.disabled = false; sb.textContent = "Continue — final level ›"; }
+  surveyAnswers = {}; surveyComment = ""; surveyIndex = 0;
 }
 
 /* ────────────────────────────────────────────────
@@ -1492,11 +1528,121 @@ function finishDeck(){
     $("#revisit-block").style.display = "";
     $("#revisit-list").innerHTML = nowItems.map(n=>`• ${escapeHtml(n)}`).join("<br>");
   } else { $("#revisit-block").style.display = "none"; }
+  surveyAnswers = {}; surveyComment = ""; surveyIndex = 0;
   showScreen("complete");
   // big confetti
   setTimeout(()=>burst(innerWidth/2, innerHeight*0.3, ["#c9973e","#0d7377","#f0bc5e","#14a8a8","#a8c66c"], 70), 250);
 }
-$("#submit-btn").addEventListener("click", submitResults);
+/* ────────────────────────────────────────────────
+   SURVEY — the "final level" between the deck and the prize token.
+   Answers are stored 1–5 and ride along in the same payload
+   submitResults() already sends to the Apps Script.
+   Scales: confidence 1=Not at all … 5=Completely
+           agree      1=Strongly disagree … 5=Strongly agree
+   ──────────────────────────────────────────────── */
+const SURVEY_SCALES = {
+  confidence: ["Not at all confident","Slightly confident","Moderately confident","Very confident","Completely confident"],
+  agree: ["Strongly disagree","Disagree","Neutral","Agree","Strongly agree"]
+};
+const SURVEY_QUESTIONS = [
+  { id:"confidence_before", scale:"confidence", kicker:"Rewind", color:"#4ea1d3",
+    text:"Think back to before this training. If the emergency crani call had come in that day \u2014 how ready were you?" },
+  { id:"confidence_after", scale:"confidence", kicker:"Tonight", color:"#e8a33d",
+    text:"The call comes in tonight. How ready are you now?" },
+  { id:"key_steps", scale:"agree", kicker:"First moves", color:"#ef6f6c",
+    text:"Phone rings: Class 1 crani, patient here in 60 minutes. I know my first three moves without looking at a checklist." },
+  { id:"positioning_equipment", scale:"agree", kicker:"Teach it", color:"#7c5cb8",
+    // Fallback if role is somehow missing; roleText overrides per role below
+    text:"A new staff member asks me: \u201cHow\u2019s the patient positioned, and what equipment goes where?\u201d I could walk them through it for my role.",
+    roleText:{
+      "RN":"A new circulator asks me: \u201cHow\u2019s the patient positioned, and what equipment goes where in the room?\u201d I could walk them through it.",
+      "Scrub":"A new scrub asks me: \u201cHow do you set up the back table and mayo for a crani?\u201d I could walk them through it.",
+      "SA":"A new SA asks me: \u201cWhat\u2019s my part in an emergency crani \u2014 opening packs and instruments, helping with positioning, and being ready to support the surgeon for the procedure?\u201d I could walk them through it.",
+      "Support":"A new support staff asks me: \u201cWhat equipment gets pulled for a crani, and where does it go?\u201d I could walk them through it."
+    } },
+  { id:"item_location", scale:"agree", kicker:"No hunting", color:"#2a7f5f",
+    text:"I could locate crani items that don\u2019t live on the emergency cart \u2014 without hunting." }
+];
+let surveyAnswers = {};
+let surveyComment = "";
+let surveyIndex = 0;
+let surveyAdvanceTimer = null;
+
+function startSurvey(){
+  if(session.submitted) return;
+  const firstMissing = SURVEY_QUESTIONS.findIndex(q=>!surveyAnswers[q.id]);
+  surveyIndex = firstMissing === -1 ? SURVEY_QUESTIONS.length : firstMissing;
+  showScreen("survey");
+  renderSurveyStep();
+}
+function renderSurveyDots(){
+  const total = SURVEY_QUESTIONS.length + 1;
+  const holder = $("#survey-dots"); holder.innerHTML = "";
+  for(let i=0;i<total;i++){
+    const d = document.createElement("div");
+    d.className = "survey-dot" + (i<surveyIndex ? " done" : i===surveyIndex ? " current" : "");
+    if(i===surveyIndex){
+      const col = i < SURVEY_QUESTIONS.length ? SURVEY_QUESTIONS[i].color : "#c44b8a";
+      d.style.background = col;
+    }
+    holder.appendChild(d);
+  }
+}
+function renderSurveyStep(){
+  clearTimeout(surveyAdvanceTimer);
+  renderSurveyDots();
+  const stage = $("#survey-stage");
+  if(surveyIndex < SURVEY_QUESTIONS.length){
+    const q = SURVEY_QUESTIONS[surveyIndex];
+    const opts = SURVEY_SCALES[q.scale];
+    const chosen = surveyAnswers[q.id];
+    stage.innerHTML = `
+      <div class="survey-card" style="--qc:${q.color}">
+        <div class="survey-kicker">${q.kicker} \u00b7 ${surveyIndex+1} of ${SURVEY_QUESTIONS.length}</div>
+        <div class="survey-q">${q.roleText && q.roleText[session.role] ? q.roleText[session.role] : q.text}</div>
+        <div class="survey-opts">
+          ${opts.map((label,i)=>`<button class="survey-opt${chosen===i+1?" selected":""}" data-val="${i+1}"><span class="opt-num">${i+1}</span><span>${label}</span></button>`).join("")}
+        </div>
+      </div>
+      ${surveyIndex>0 ? '<button class="survey-back" id="survey-back">\u2039 Change previous answer</button>' : ""}
+    `;
+    stage.querySelectorAll(".survey-opt").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        stage.querySelectorAll(".survey-opt").forEach(b=>b.classList.remove("selected"));
+        btn.classList.add("selected");
+        surveyAnswers[q.id] = parseInt(btn.dataset.val,10);
+        surveyAdvanceTimer = setTimeout(()=>{ surveyIndex++; renderSurveyStep(); }, 350);
+      });
+    });
+    const back = stage.querySelector("#survey-back");
+    if(back) back.addEventListener("click", ()=>{ surveyIndex--; renderSurveyStep(); });
+  } else {
+    stage.innerHTML = `
+      <div class="survey-card" style="--qc:#c44b8a">
+        <div class="survey-kicker">Last one \u00b7 optional</div>
+        <div class="survey-q">Anything that was helpful, could be improved, or that you\u2019d like to see in future crani trainings?</div>
+        <textarea class="survey-comment" id="survey-comment-box" placeholder="Totally optional \u2014 the button below works either way."></textarea>
+        <button class="cta" id="survey-finish">Get my prize token</button>
+      </div>
+      <button class="survey-back" id="survey-back">\u2039 Change previous answer</button>
+    `;
+    const box = $("#survey-comment-box");
+    box.value = surveyComment;
+    box.addEventListener("input", e=>{ surveyComment = e.target.value; });
+    $("#survey-back").addEventListener("click", ()=>{ surveyIndex--; renderSurveyStep(); });
+    $("#survey-finish").addEventListener("click", ()=>{
+      const missing = SURVEY_QUESTIONS.findIndex(q=>!surveyAnswers[q.id]);
+      if(missing >= 0){ surveyIndex = missing; renderSurveyStep(); return; }
+      showScreen("complete");
+      submitResults();
+    });
+  }
+}
+
+$("#submit-btn").addEventListener("click", ()=>{
+  if(SURVEY_QUESTIONS.every(q=>surveyAnswers[q.id])){ submitResults(); }
+  else { startSurvey(); }
+});
 async function submitResults(){
   if(session.submitting || session.submitted) return;
   session.submitting = true;
@@ -1532,6 +1678,12 @@ async function submitResults(){
     now_know_count: now,
     items_marked_now_know: nowItems.join("; "),
     chunks_with_unknowns: chunksWithUnknowns,
+    confidence_before: surveyAnswers.confidence_before || "",
+    confidence_after: surveyAnswers.confidence_after || "",
+    key_steps: surveyAnswers.key_steps || "",
+    positioning_equipment: surveyAnswers.positioning_equipment || "",
+    item_location: surveyAnswers.item_location || "",
+    comment: (surveyComment || "").trim(),
     app_version: APP_VERSION,
   };
 
@@ -1581,7 +1733,7 @@ async function submitResults(){
     session.submitting = false;
     session.submitted = false;
     btn.disabled = false;
-    btn.textContent = "Submit for prize";
+    btn.textContent = "Try again \u203a";
     status.className = "submit-status error";
     status.style.display = "block";
     status.textContent = "Something went wrong. Tap Submit to try again.";
